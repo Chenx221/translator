@@ -7,6 +7,7 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var translateRouter = require('./routes/translate');
+var docRouter = require('./routes/doc');
 
 var app = express();
 
@@ -21,6 +22,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
+app.use('/doc', docRouter);
 app.use('/translate', translateRouter);
 
 // catch 404 and forward to error handler
@@ -39,10 +41,18 @@ app.use(function (err, req, res, next) {
     res.render('error');
 });
 
-let enabledServices= process.env.TRANSLATION_SERVICES.split(',');
+if (!process.env.TRANSLATION_SERVICES) {
+    console.error('Error: TRANSLATION_SERVICES is not defined in .env file. It is possible that the .env file was not read or the format is incorrect.');
+    process.exit(1);
+}
+
+let enabledServices = process.env.TRANSLATION_SERVICES.split(',');
 global.services = {
     aliyunGeneral: enabledServices.includes('aliyun-general'),
     aliyunProfessional: enabledServices.includes('aliyun-professional')
 };
+
+console.log('Configuration loaded successfully.');
+console.log('DOCUMENTATION: http://localhost:' + (process.env.PORT || 3000));
 
 module.exports = app;

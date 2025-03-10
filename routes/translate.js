@@ -13,7 +13,7 @@ router.post('/', async (req, res) => {
 
     if (global.services.aliyunGeneral) {
         let resp = await Client.translate(text, sourceLanguage, aliyunTargetLanguage, false);
-        if (!'statusCode' in resp)
+        if (!('statusCode' in resp))
             translationPromises.push('Something went wrong');
         else
             translationPromises.push(resp.statusCode !== 200 ? `[${resp.statusCode}] ${resp.error}` : resp.body.data.translated);
@@ -21,15 +21,16 @@ router.post('/', async (req, res) => {
 
     if (global.services.aliyunProfessional) {
         let resp = await Client.translate(text, sourceLanguage, aliyunTargetLanguage, true);
-        if (!'statusCode' in resp)
-            translationPromises.push('Something went wrong');
+        if (!('statusCode' in resp))
+            translationPromises.push('[ERROR] Something went wrong');
         else
             translationPromises.push(resp.statusCode !== 200 ? `[${resp.statusCode}] ${resp.error}` : resp.body.data.translated);
     }
 
     try {
         const results = await Promise.all(translationPromises);
-        res.json({translations: results});
+        const combinedTranslation = results.join('\u200b\n');
+        res.json({translation: combinedTranslation});
     } catch (error) {
         res.status(500).json({error: 'Translation failed', details: error.message}); //useless
     }
