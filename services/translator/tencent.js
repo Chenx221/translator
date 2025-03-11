@@ -11,7 +11,7 @@ class Client {
                     secretId: process.env.TENCENT_SECRET_ID,
                     secretKey: process.env.TENCENT_SECRET_KEY
                 },
-                region: "ap-shanghai",
+                region: process.env.TENCENT_MT_REGION,
                 profile: {
                     httpProfile: {
                         endpoint: process.env.TENCENT_MT_ENDPOINT,
