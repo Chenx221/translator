@@ -1,18 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const Client = require('../services/translator/aliyun');
+const AliyunClient = require('../services/translator/aliyun');
+const TencentClient = require('../services/translator/tencent');
 
 
 router.post('/', async (req, res) => {
     const {text} = req.body;
-
-    const sourceLanguage = process.env.SOURCE_LANGUAGE;
-    const aliyunTargetLanguage = process.env.ALIYUN_TARGET_LANGUAGE;
-
     const translationPromises = [];
 
     if (global.services.aliyunGeneral) {
-        let resp = await Client.translate(text, sourceLanguage, aliyunTargetLanguage, false);
+        let resp = await AliyunClient.translate(text, false);
         if (!('statusCode' in resp))
             translationPromises.push('Something went wrong');
         else
@@ -20,11 +17,20 @@ router.post('/', async (req, res) => {
     }
 
     if (global.services.aliyunProfessional) {
-        let resp = await Client.translate(text, sourceLanguage, aliyunTargetLanguage, true);
+        let resp = await AliyunClient.translate(text, true);
         if (!('statusCode' in resp))
             translationPromises.push('[ERROR] Something went wrong');
         else
             translationPromises.push(resp.statusCode !== 200 ? `[${resp.statusCode}] ${resp.error}` : resp.body.data.translated);
+    }
+
+    if (global.services.tencent) {
+        try {
+            let resp = await TencentClient.translate(text);
+            translationPromises.push(resp.TargetText);
+        } catch (err) {
+            translationPromises.push('[ERROR] ' + err.code);
+        }
     }
 
     try {

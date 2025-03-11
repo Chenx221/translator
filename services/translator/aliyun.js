@@ -17,9 +17,11 @@ class Client {
         return Client.client;
     }
 
-    static async translate(text, sourceLanguage, targetLanguage, isPro) {
+    static async translate(text, isPro) {
         let client = Client.createClient();
         let runtime = new Util.RuntimeOptions({});
+        const targetLanguage = process.env.ALIYUN_TARGET_LANGUAGE;
+        const sourceLanguage = process.env.ALIYUN_SOURCE_LANGUAGE;
         try {
             if (isPro) {
                 let translateRequest = new alimt20181012.TranslateRequest({

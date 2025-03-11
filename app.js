@@ -49,7 +49,8 @@ if (!process.env.TRANSLATION_SERVICES) {
 let enabledServices = process.env.TRANSLATION_SERVICES.split(',');
 global.services = {
     aliyunGeneral: enabledServices.includes('aliyun-general'),
-    aliyunProfessional: enabledServices.includes('aliyun-professional')
+    aliyunProfessional: enabledServices.includes('aliyun-professional'),
+    tencent: enabledServices.includes('tencent')
 };
 
 console.log('Configuration loaded successfully.');

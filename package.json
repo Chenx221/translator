@@ -18,6 +18,7 @@
     "http-errors": "~1.6.3",
     "marked": "^15.0.7",
     "morgan": "~1.9.1",
-    "pug": "3.0.3"
+    "pug": "3.0.3",
+    "tencentcloud-sdk-nodejs-tmt": "^4.0.1027"
   }
 }

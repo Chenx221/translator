@@ -1,6 +1,19 @@
+Setup Guide: https://help.aliyun.com/zh/machine-translation/getting-started/guide-for-non-developers/
+
+ENV:
+```
+TRANSLATION_SERVICES=[aliyun-general,aliyun-professional]
+ALIYUN_MT_ENDPOINT=mt.aliyuncs.com
+ALIYUN_ACCESS_KEY_ID=<secret>
+ALIYUN_ACCESS_KEY_SECRET=<secret>
+ALIYUN_SOURCE_LANGUAGE=<language Code>
+ALIYUN_TARGET_LANGUAGE=<language Code>
+```
+---
 
 | **Language**             | **Code** |
-|--------------------------|----------|
+| ------------------------ | -------- |
+| Auto Detection           | auto     |
 | Abkhazian                | ab       |
 | Albanian                 | sq       |
 | Akan                     | ak       |
