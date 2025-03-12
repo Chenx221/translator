@@ -50,7 +50,9 @@ let enabledServices = process.env.TRANSLATION_SERVICES.split(',');
 global.services = {
     aliyunGeneral: enabledServices.includes('aliyun-general'),
     aliyunProfessional: enabledServices.includes('aliyun-professional'),
-    tencent: enabledServices.includes('tencent')
+    tencent: enabledServices.includes('tencent'),
+    youdaoGereral: enabledServices.includes('youdao-general'),
+    youdaoLLM: enabledServices.includes('youdao-llm'),
 };
 
 console.log('Configuration loaded successfully.');

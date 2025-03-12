@@ -43,7 +43,7 @@ class Client {
                 return await client.translateGeneralWithOptions(translateGeneralRequest, runtime);
             }
         } catch (error) {
-            console.log(error.message); console.log(error.data["Recommend"]);
+            console.error(error.message); console.error(error.data["Recommend"]);
             return { error: error.code, statusCode: error.statusCode };
         }
     }

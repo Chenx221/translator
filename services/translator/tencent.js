@@ -34,8 +34,7 @@ class Client {
         try {
             return await client.TextTranslate(params);
         } catch (err) {
-            console.log(err.code);
-            console.log(`${err.message} (${err.requestId})`);
+            console.error(`${err.code} ${err.message} (${err.requestId})`);
             throw err;
         }
     }
