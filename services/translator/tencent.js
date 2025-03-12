@@ -23,7 +23,7 @@ class Client {
         return Client.client;
     }
 
-    static async translate(text, sourceLanguage) {
+    static async translate(text) {
         const params = {
             "SourceText": text,
             "Source": process.env.TENCENT_SOURCE_LANGUAGE,

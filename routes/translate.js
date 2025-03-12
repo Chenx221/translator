@@ -4,6 +4,7 @@ const router = express.Router();
 const AliyunClient = require('../services/translator/aliyun');
 const TencentClient = require('../services/translator/tencent');
 const YoudaoClient = require('../services/translator/youdao');
+const BaiduClient = require('../services/translator/baidu');
 
 router.post('/', async (req, res) => {
     const {text} = req.body;
@@ -50,6 +51,15 @@ router.post('/', async (req, res) => {
             translationPromises.push(resp);
         } catch (err) {
             translationPromises.push('[Error] Please check the console output.');
+        }
+    }
+
+    if (global.services.baidu) {
+        try{
+            let resp = await BaiduClient.translate(text);
+            translationPromises.push(resp.result.trans_result[0].dst);
+        } catch (err) {
+            translationPromises.push('[Error] '+err.message);
         }
     }
 

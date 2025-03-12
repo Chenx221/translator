@@ -53,6 +53,7 @@ global.services = {
     tencent: enabledServices.includes('tencent'),
     youdaoGereral: enabledServices.includes('youdao-general'),
     youdaoLLM: enabledServices.includes('youdao-llm'),
+    baidu: enabledServices.includes('baidu'),
 };
 
 console.log('Configuration loaded successfully.');
