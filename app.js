@@ -54,6 +54,12 @@ global.services = {
     youdaoGereral: enabledServices.includes('youdao-general'),
     youdaoLLM: enabledServices.includes('youdao-llm'),
     baidu: enabledServices.includes('baidu'),
+    xftransGeneral: enabledServices.includes('xftrans-general'),
+    xftransNew: enabledServices.includes('xftrans-new'),
+    xftransNiutrans: enabledServices.includes('xftrans-niutrans')
+
+    //TODO:
+    //Yandex, 腾讯交互翻译, 火山机器翻译, 彩云小译, 小牛翻译
 };
 
 console.log('Configuration loaded successfully.');

@@ -2,9 +2,10 @@ const express = require('express');
 const router = express.Router();
 
 const AliyunClient = require('../services/translator/aliyun');
+const BaiduClient = require('../services/translator/baidu');
+const iFlytekClient = require('../services/translator/iflytek');
 const TencentClient = require('../services/translator/tencent');
 const YoudaoClient = require('../services/translator/youdao');
-const BaiduClient = require('../services/translator/baidu');
 
 router.post('/', async (req, res) => {
     const {text} = req.body;
@@ -24,6 +25,42 @@ router.post('/', async (req, res) => {
             translationPromises.push('[ERROR] Something went wrong');
         else
             translationPromises.push(resp.statusCode !== 200 ? `[${resp.statusCode}] ${resp.error}` : resp.body.data.translated);
+    }
+
+    if (global.services.baidu) {
+        try{
+            let resp = await BaiduClient.translate(text);
+            translationPromises.push(resp.result.trans_result[0].dst);
+        } catch (err) {
+            translationPromises.push('[Error] '+err.message);
+        }
+    }
+
+    if (global.services.xftransGeneral) {
+        try {
+            let resp = await iFlytekClient.translate(text, 0);
+            translationPromises.push(resp.TargetText);
+        } catch (err) {
+            translationPromises.push(`[ERROR] ${err.status} ${err.response.statusText}`);
+        }
+    }
+
+    if (global.services.xftransNew) {
+        try {
+            let resp = await iFlytekClient.translate(text, 1);
+            translationPromises.push(resp.TargetText);
+        } catch (err) {
+            translationPromises.push(`[ERROR] ${err.status} ${err.response.statusText}`);
+        }
+    }
+
+    if (global.services.xftransNiutrans) {
+        try {
+            let resp = await iFlytekClient.translate(text, 2);
+            translationPromises.push(resp.TargetText);
+        } catch (err) {
+            translationPromises.push(`[ERROR] ${err.status} ${err.response.statusText}`);
+        }
     }
 
     if (global.services.tencent) {
@@ -54,14 +91,7 @@ router.post('/', async (req, res) => {
         }
     }
 
-    if (global.services.baidu) {
-        try{
-            let resp = await BaiduClient.translate(text);
-            translationPromises.push(resp.result.trans_result[0].dst);
-        } catch (err) {
-            translationPromises.push('[Error] '+err.message);
-        }
-    }
+
 
     try {
         const results = await Promise.all(translationPromises);
