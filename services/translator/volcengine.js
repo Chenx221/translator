@@ -1,5 +1,4 @@
 const crypto = require('crypto');
-const Service = require('@volcengine/openapi').Service;
 
 class Client {
     static async translate(text) {
@@ -13,7 +12,7 @@ class Client {
         const dateStr = date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
         const datestamp = dateStr.substring(0, 8);
 
-        let payload;// = '{"SourceLanguage":"en","TargetLanguage":"zh","TextList":["hello world"]}';
+        let payload;
         if (sourceLanguage !== "auto")
             payload = JSON.stringify({
                 Action: 'TranslateText',
@@ -68,7 +67,6 @@ class Client {
         if (!response.ok) {
             throw new Error(`ERROR! Status: ${response.status}`);
         }
-        // Todo: fix authorization not working
         return response.json();
     }
 
@@ -103,40 +101,6 @@ class Client {
         return crypto.createHmac('sha256', kService).update('request').digest();
     }
 
-}
-
-class Client2 {
-    static async translate(text) {
-        const accessKeyId = process.env.VOLCENGINE_ACCESS_KEY_ID;
-        const secretKey = process.env.VOLCENGINE_SECRET_ACCESS_KEY;
-        const sourceLanguage = process.env.VOLCENGINE_SOURCE_LANGUAGE;
-        const targetLanguage = process.env.VOLCENGINE_TARGET_LANGUAGE;
-
-        const postBody = {
-            SourceLanguage: sourceLanguage,
-            TargetLanguage: targetLanguage,
-            TextList: [text],
-        };
-
-        const service = new Service({
-            host: "translate.volcengineapi.com",
-            serviceName: "translate",
-            region: "cn-north-1",
-            accessKeyId,
-            secretKey,
-        });
-
-        const fetchApi = service.createAPI("TranslateText", {
-            Version: "2020-06-01",
-            method: "POST",
-            contentType: "json",
-        });
-
-        const rr = await fetchApi(postBody, {});
-
-        console.log(rr.TranslationList);
-        return rr;
-    }
 }
 
 module.exports = Client;

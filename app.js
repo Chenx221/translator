@@ -59,7 +59,6 @@ global.services = {
     youdaoGereral: enabledServices.includes('youdao-general'),
     youdaoLLM: enabledServices.includes('youdao-llm'),
     //TODO:
-    //修好火山引擎的翻译
     //Yandex, 腾讯交互翻译, 彩云小译, 小牛翻译, MOJI, 金山词霸, AI Model
 };
 

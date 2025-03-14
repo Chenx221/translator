@@ -47,13 +47,13 @@ router.post('/', async (req, res) => {
     }
 
     if (global.services.volcengine) {
-        // TODO: Fix Volcengine translation, it's not working
-        try {
-            let resp = await volcengineClient.translate(text);
-            translationPromises.push(resp.TargetText);
-        } catch (err) {
-            translationPromises.push('[ERROR] ' + err.code);
+        let resp = await volcengineClient.translate(text);
+        if (resp.ResponseMetadata.Error) {
+            console.error(`[ERROR] ${resp.ResponseMetadata.Error.Code}. ${resp.ResponseMetadata.Error.Message} (RequestId: ${resp.ResponseMetadata.RequestId})`);
+            translationPromises.push(`[ERROR] ${resp.ResponseMetadata.Error.Code}`);
         }
+        else
+            translationPromises.push(resp.TranslationList[0].Translation);
     }
 
     if (global.services.xftransGeneral) {
