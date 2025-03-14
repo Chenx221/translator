@@ -5,6 +5,7 @@ const AliyunClient = require('../services/translator/aliyun');
 const BaiduClient = require('../services/translator/baidu');
 const iFlytekClient = require('../services/translator/iflytek');
 const TencentClient = require('../services/translator/tencent');
+const volcengineClient = require('../services/translator/volcengine');
 const YoudaoClient = require('../services/translator/youdao');
 
 router.post('/', async (req, res) => {
@@ -28,11 +29,30 @@ router.post('/', async (req, res) => {
     }
 
     if (global.services.baidu) {
-        try{
+        try {
             let resp = await BaiduClient.translate(text);
             translationPromises.push(resp.result.trans_result[0].dst);
         } catch (err) {
-            translationPromises.push('[Error] '+err.message);
+            translationPromises.push('[Error] ' + err.message);
+        }
+    }
+
+    if (global.services.tencent) {
+        try {
+            let resp = await TencentClient.translate(text);
+            translationPromises.push(resp.TargetText);
+        } catch (err) {
+            translationPromises.push('[ERROR] ' + err.code);
+        }
+    }
+
+    if (global.services.volcengine) {
+        // TODO: Fix Volcengine translation, it's not working
+        try {
+            let resp = await volcengineClient.translate(text);
+            translationPromises.push(resp.TargetText);
+        } catch (err) {
+            translationPromises.push('[ERROR] ' + err.code);
         }
     }
 
@@ -63,34 +83,23 @@ router.post('/', async (req, res) => {
         }
     }
 
-    if (global.services.tencent) {
-        try {
-            let resp = await TencentClient.translate(text);
-            translationPromises.push(resp.TargetText);
-        } catch (err) {
-            translationPromises.push('[ERROR] ' + err.code);
-        }
-    }
-
     if (global.services.youdaoGereral) {
         let resp = await YoudaoClient.translate(text, false);
-        if (resp.errorCode !== "0"){
+        if (resp.errorCode !== "0") {
             console.error(`[ERROR] ${resp.errorCode}, RequestId: ${resp.requestId}`);
             translationPromises.push(`[ERROR] ${resp.errorCode}, RequestId: ${resp.requestId}`);
-        }
-        else
+        } else
             translationPromises.push(resp.translation[0]);
     }
 
     if (global.services.youdaoLLM) {
-        try{
+        try {
             let resp = await YoudaoClient.translate(text, true);
             translationPromises.push(resp);
         } catch (err) {
             translationPromises.push('[Error] Please check the console output.');
         }
     }
-
 
 
     try {

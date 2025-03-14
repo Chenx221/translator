@@ -50,16 +50,17 @@ let enabledServices = process.env.TRANSLATION_SERVICES.split(',');
 global.services = {
     aliyunGeneral: enabledServices.includes('aliyun-general'),
     aliyunProfessional: enabledServices.includes('aliyun-professional'),
-    tencent: enabledServices.includes('tencent'),
-    youdaoGereral: enabledServices.includes('youdao-general'),
-    youdaoLLM: enabledServices.includes('youdao-llm'),
     baidu: enabledServices.includes('baidu'),
+    tencent: enabledServices.includes('tencent'),
+    volcengine: enabledServices.includes('volcengine'),
     xftransGeneral: enabledServices.includes('xftrans-general'),
     xftransNew: enabledServices.includes('xftrans-new'),
-    xftransNiutrans: enabledServices.includes('xftrans-niutrans')
-
+    xftransNiutrans: enabledServices.includes('xftrans-niutrans'),
+    youdaoGereral: enabledServices.includes('youdao-general'),
+    youdaoLLM: enabledServices.includes('youdao-llm'),
     //TODO:
-    //Yandex, 腾讯交互翻译, 火山机器翻译, 彩云小译, 小牛翻译
+    //修好火山引擎的翻译
+    //Yandex, 腾讯交互翻译, 彩云小译, 小牛翻译, MOJI, 金山词霸, AI Model
 };
 
 console.log('Configuration loaded successfully.');
