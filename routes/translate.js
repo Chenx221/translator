@@ -4,6 +4,7 @@ const router = express.Router();
 const AliyunClient = require('../services/translator/aliyun');
 const BaiduClient = require('../services/translator/baidu');
 const CaiyunClient = require('../services/translator/caiyun');
+const NiutransClient = require('../services/translator/niutrans');
 const iFlytekClient = require('../services/translator/iflytek');
 const TencentClient = require('../services/translator/tencent');
 const volcengineClient = require('../services/translator/volcengine');
@@ -47,6 +48,15 @@ router.post('/', async (req, res) => {
         }
     }
 
+    if (global.services.niutrans) {
+        let resp = await NiutransClient.translate(text);
+        if (resp.error_code === undefined)
+            translationPromises.push(resp.tgt_text);
+        else {
+            console.error(`[ERROR] ${resp.error_code} ${resp.error_msg}`);
+            translationPromises.push('[Error] ' + resp.error_code + ' ' + resp.error_msg);
+        }
+    }
 
     if (global.services.tencent) {
         try {

@@ -52,6 +52,7 @@ global.services = {
     aliyunProfessional: enabledServices.includes('aliyun-professional'),
     baidu: enabledServices.includes('baidu'),
     caiyun: enabledServices.includes('caiyun'),
+    niutrans: enabledServices.includes('niutrans'),
     tencent: enabledServices.includes('tencent'),
     volcengine: enabledServices.includes('volcengine'),
     xftransGeneral: enabledServices.includes('xftrans-general'),
