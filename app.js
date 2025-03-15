@@ -52,6 +52,7 @@ global.services = {
     aliyunProfessional: enabledServices.includes('aliyun-professional'),
     baidu: enabledServices.includes('baidu'),
     caiyun: enabledServices.includes('caiyun'),
+    deepseek: enabledServices.includes('deepseek'),
     niutrans: enabledServices.includes('niutrans'),
     tencent: enabledServices.includes('tencent'),
     volcengine: enabledServices.includes('volcengine'),
@@ -61,7 +62,8 @@ global.services = {
     youdaoGereral: enabledServices.includes('youdao-general'),
     youdaoLLM: enabledServices.includes('youdao-llm'),
     //TODO:
-    //Yandex, 腾讯交互翻译, 小牛翻译, MOJI, 金山词霸, AI Model, Google, Azure, Bing, Deepl
+    //Deepseek, gemini, openai, ollama...
+    //Yandex, 腾讯交互翻译, MOJI, 金山词霸, AI Model, Google, Azure, Bing, Deepl, papago, IBM, systransoft, reverso，Amazon, LibreTranslate...
 };
 
 console.log('Configuration loaded successfully.');

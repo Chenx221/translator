@@ -4,6 +4,7 @@ const router = express.Router();
 const AliyunClient = require('../services/translator/aliyun');
 const BaiduClient = require('../services/translator/baidu');
 const CaiyunClient = require('../services/translator/caiyun');
+const DeepseekClient = require('../services/ai/deepseek');
 const NiutransClient = require('../services/translator/niutrans');
 const iFlytekClient = require('../services/translator/iflytek');
 const TencentClient = require('../services/translator/tencent');
@@ -45,6 +46,15 @@ router.post('/', async (req, res) => {
             translationPromises.push(resp.target);
         } catch (err) {
             translationPromises.push('[Error] ' + err.response.status + ' ' + err.response.statusText);
+        }
+    }
+
+    if (global.services.deepseek) {
+        try {
+            let resp = await DeepseekClient.translate(text);
+            translationPromises.push(parseJsonOrExtractFromAiResponse(resp).translation);
+        } catch (err) {
+            translationPromises.push('[Error] Please check the console for error details.');
         }
     }
 
@@ -130,5 +140,23 @@ router.post('/', async (req, res) => {
         res.status(500).json({error: 'Translation failed', details: error.message}); //useless
     }
 });
+
+function parseJsonOrExtractFromAiResponse(content) {
+    try {
+        return JSON.parse(content);
+    } catch {
+        try {
+            const match = content.match(/```json\s*([\s\S]*?)\s*```/);
+            if (match) {
+                return JSON.parse(match[1]);
+            }
+            throw new Error();
+        } catch (error) {
+            console.error('Damn, the AI returned unparseable data. Data: ', content);
+            throw error;
+        }
+    }
+}
+
 
 module.exports = router;
