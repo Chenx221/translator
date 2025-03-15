@@ -3,6 +3,7 @@ const router = express.Router();
 
 const AliyunClient = require('../services/translator/aliyun');
 const BaiduClient = require('../services/translator/baidu');
+const CaiyunClient = require('../services/translator/caiyun');
 const iFlytekClient = require('../services/translator/iflytek');
 const TencentClient = require('../services/translator/tencent');
 const volcengineClient = require('../services/translator/volcengine');
@@ -37,6 +38,16 @@ router.post('/', async (req, res) => {
         }
     }
 
+    if (global.services.caiyun) {
+        try {
+            let resp = await CaiyunClient.translate(text);
+            translationPromises.push(resp.target);
+        } catch (err) {
+            translationPromises.push('[Error] ' + err.response.status + ' ' + err.response.statusText);
+        }
+    }
+
+
     if (global.services.tencent) {
         try {
             let resp = await TencentClient.translate(text);
@@ -51,8 +62,7 @@ router.post('/', async (req, res) => {
         if (resp.ResponseMetadata.Error) {
             console.error(`[ERROR] ${resp.ResponseMetadata.Error.Code}. ${resp.ResponseMetadata.Error.Message} (RequestId: ${resp.ResponseMetadata.RequestId})`);
             translationPromises.push(`[ERROR] ${resp.ResponseMetadata.Error.Code}`);
-        }
-        else
+        } else
             translationPromises.push(resp.TranslationList[0].Translation);
     }
 

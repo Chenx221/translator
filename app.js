@@ -51,6 +51,7 @@ global.services = {
     aliyunGeneral: enabledServices.includes('aliyun-general'),
     aliyunProfessional: enabledServices.includes('aliyun-professional'),
     baidu: enabledServices.includes('baidu'),
+    caiyun: enabledServices.includes('caiyun'),
     tencent: enabledServices.includes('tencent'),
     volcengine: enabledServices.includes('volcengine'),
     xftransGeneral: enabledServices.includes('xftrans-general'),
@@ -59,7 +60,7 @@ global.services = {
     youdaoGereral: enabledServices.includes('youdao-general'),
     youdaoLLM: enabledServices.includes('youdao-llm'),
     //TODO:
-    //Yandex, 腾讯交互翻译, 彩云小译, 小牛翻译, MOJI, 金山词霸, AI Model
+    //Yandex, 腾讯交互翻译, 小牛翻译, MOJI, 金山词霸, AI Model, Google, Azure, Bing, Deepl
 };
 
 console.log('Configuration loaded successfully.');
