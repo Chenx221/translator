@@ -30,7 +30,7 @@ class Client {
                     })
                 }
             ],
-            model: "deepseek-chat",
+            model: process.env.DEEPSEEK_MODEL,
         });
         return completion.choices[0].message.content;
     }
