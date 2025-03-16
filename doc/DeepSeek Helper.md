@@ -20,7 +20,7 @@ DEEPSEEK_TARGET_LANGUAGE=
 		
 		`deepseek-reasoner` is very unstable and I haven't tested it yet.
 		
-		*I may add a feature to retrieve the list of available models in future updates.*
+		If you have already configured the API key, please check the bottom of this document.
 
 - DEEPSEEK_PROMPT
 

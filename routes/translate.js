@@ -3,6 +3,7 @@ import AliyunClient from '../services/translator/aliyun.js';
 import BaiduClient from '../services/translator/baidu.js';
 import CaiyunClient from '../services/translator/caiyun.js';
 import DeepseekClient from '../services/ai/deepseek.js';
+import GeminiClient from '../services/ai/gemini.js';
 import NiutransClient from '../services/translator/niutrans.js';
 import iFlytekClient from '../services/translator/iflytek.js';
 import TencentClient from '../services/translator/tencent.js';
@@ -60,6 +61,17 @@ router.post('/', async (req, res) => {
             let resp = await DeepseekClient.translate(text);
             translationPromises.push(parseJsonOrExtractFromAiResponse(resp).translation);
         } catch (err) {
+            console.error(`[ERROR] ${err.message}`);
+            translationPromises.push('deepseek: [Error] Please check the console for error details.');
+        }
+    }
+
+    if (global.services.gemini) {
+        try {
+            let resp = await GeminiClient.translate(text);
+            translationPromises.push(parseJsonOrExtractFromAiResponse(resp).translation);
+        } catch (err) {
+            console.error(`[ERROR] ${err.message}`);
             translationPromises.push('deepseek: [Error] Please check the console for error details.');
         }
     }

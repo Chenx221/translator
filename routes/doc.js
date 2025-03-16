@@ -3,6 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import {marked} from 'marked';
 import DeepSeekClient from '../services/ai/deepseek.js';
+import GeminiClient from "../services/ai/gemini.js";
 
 const router = express.Router();
 
@@ -15,19 +16,26 @@ router.get('/:filename', async function (req, res, next) {
         const data = await fs.promises.readFile(filePath, 'utf8');
         const htmlContent = marked.parse(data);
         let modelList = [];
-
-        if (isAI(req.params.filename)) {
+        const type = getAIType(req.params.filename);
+        if (type!==null) {
             try {
-                modelList = await DeepSeekClient.getModels();
+                switch (type) {
+                    case 'DeepSeek':
+                        modelList = await DeepSeekClient.getModels();
+                        break;
+                    case 'Gemini':
+                        modelList = await GeminiClient.getModels();
+                        break;
+                }
             } catch (error) {
-                console.error('Failed to fetch DeepSeek models:', error.message);
+                console.error(`Failed to fetch ${type} models:`, error.message);
             }
         }
 
         res.render('doc', {
             title: req.params.filename,
             content: htmlContent,
-            isAI: isAI(req.params.filename),
+            isAI: getAIType(req.params.filename)!==null,
             models: modelList
         });
     } catch (err) {
@@ -35,8 +43,10 @@ router.get('/:filename', async function (req, res, next) {
     }
 });
 
-function isAI(filename) {
-    return filename.startsWith('DeepSeek');
+function getAIType(filename) {
+    if (filename.startsWith('DeepSeek')) return 'DeepSeek';
+    if (filename.startsWith('Gemini')) return 'Gemini';
+    return null;
 }
 
 export default router;

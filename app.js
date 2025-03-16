@@ -56,6 +56,7 @@ global.services = {
     baidu: enabledServices.includes('baidu'),
     caiyun: enabledServices.includes('caiyun'),
     deepseek: enabledServices.includes('deepseek'),
+    gemini: enabledServices.includes('gemini'),
     niutrans: enabledServices.includes('niutrans'),
     tencent: enabledServices.includes('tencent'),
     volcengine: enabledServices.includes('volcengine'),
@@ -65,11 +66,11 @@ global.services = {
     youdaoGereral: enabledServices.includes('youdao-general'),
     youdaoLLM: enabledServices.includes('youdao-llm'),
     //TODO:
-    //gemini, openai, ollama...
+    //openai, ollama...
     //Yandex, 腾讯交互翻译, MOJI, 金山词霸, AI Model, Google, Azure, Bing, Deepl, papago, IBM, systransoft, reverso，Amazon, LibreTranslate...
 };
 
 console.log('Configuration loaded successfully.');
-console.log('DOCUMENTATION: http://localhost:' + (process.env.PORT || 3000));
+console.log('DOCUMENTATION/DEMO: http://localhost:' + (process.env.PORT || 3000));
 
 export default app;
