@@ -1,5 +1,5 @@
-const axios = require('axios');
-const uuid = require('uuid');
+import axios from 'axios';
+import { v4 as uuidv4 } from 'uuid';
 
 class Client {
     static async translate(text) {
@@ -15,7 +15,7 @@ class Client {
                 "source": text,
                 "trans_type": process.env.CAIYUN_FROM_TO,
                 // ↓ Who knows? The development documentation doesn't mention it at all.
-                "request_id": uuid.v4(),
+                "request_id": uuidv4(),
                 "detect": process.env.CAIYUN_FROM_TO.substring(0, 5) === 'auto2'
             })
         };
@@ -29,4 +29,4 @@ class Client {
     }
 }
 
-module.exports = Client;
+export default Client;

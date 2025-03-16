@@ -1,19 +1,20 @@
-const crypto = require('crypto');
-const axios = require('axios');
+import crypto from 'crypto';
+import axios from 'axios';
 
 class Client {
     static async translate(text, version) {
         try {
-            let endpoint;
-            if (version === 0) {
-                endpoint = process.env.IFLYTEK_MT_ENDPOINT;
-            } else if (version === 1) {
-                endpoint = process.env.IFLYTEK_MT_NEW_ENDPOINT;
-            } else if (version === 2) {
-                endpoint = process.env.IFLYTEK_MT_NIUTRANS_ENDPOINT;
-            } else {
-                throw new Error("Invalid version");
-            }
+            const endpoints = {
+                0: process.env.IFLYTEK_MT_ENDPOINT,
+                1: process.env.IFLYTEK_MT_NEW_ENDPOINT,
+                2: process.env.IFLYTEK_MT_NIUTRANS_ENDPOINT
+            };
+
+            const endpoint = endpoints[version];
+
+            // if (!endpoint) {
+            //     throw new Error(`Invalid version: ${version}`);
+            // }
             const url = new URL(endpoint);
             const host = url.hostname;
             const uri = url.pathname;
@@ -38,9 +39,9 @@ class Client {
 
                 const {data} = response;
 
-                if (data.code !== 0) {
-                    throw new Error(`Error code: ${data.code}, message: ${data.message}`);
-                }
+                // if (data.code !== 0) {
+                //     throw new Error(`Error code: ${data.code}, message: ${data.message}`);
+                // }
 
                 return {
                     TargetText: data.data.result.trans_result.dst,
@@ -63,9 +64,9 @@ class Client {
                 const {data} = response;
                 const {header, payload} = data;
 
-                if (header.code !== 0) {
-                    throw new Error(`Error code: ${header.code}, message: ${header.message}`);
-                }
+                // if (header.code !== 0) {
+                //     throw new Error(`Error code: ${header.code}, message: ${header.message}`);
+                // }
                 const decodedText = Buffer.from(payload.result.text, 'base64').toString();
                 const translationResult = JSON.parse(decodedText);
                 return {
@@ -76,7 +77,13 @@ class Client {
                 };
             }
         } catch (err) {
-            console.error(`iFlytek translation error: ${err.message}. ${err.response.data.message}`);
+            let errorMessage = `iFlytek translation error: ${err.message}`;
+
+            if (err.response && err.response.data && err.response.data.message) {
+                errorMessage += `. ${err.response.data.message}`;
+            }
+
+            console.error(errorMessage);
             throw err;
         }
     }
@@ -142,4 +149,4 @@ class Client {
     }
 }
 
-module.exports = Client;
+export default Client;

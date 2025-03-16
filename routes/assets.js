@@ -1,8 +1,14 @@
-var express = require('express');
-var path = require('path');
-var router = express.Router();
+import express from 'express';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const router = express.Router();
 
 // Serve static files from the "node_modules" directory
 router.use('/bootstrap', express.static(path.join(__dirname, '../node_modules/bootstrap/dist')));
 
-module.exports = router;
+export default router;

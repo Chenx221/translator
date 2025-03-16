@@ -1,4 +1,4 @@
-const axios = require('axios');
+import axios from 'axios';
 
 class Client {
     static accessToken = null;
@@ -52,4 +52,4 @@ class Client {
     }
 }
 
-module.exports = Client;
+export default Client;

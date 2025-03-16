@@ -14,20 +14,20 @@ a {
   margin-top: 20px;
 }
 
-.translation-input, .translation-output {
-  width: 45%;
-}
+/*.translation-input, .translation-output {*/
+/*  width: 45%;*/
+/*}*/
 
-.translation-controls {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 10%;
-}
+/*.translation-controls {*/
+/*  display: flex;*/
+/*  flex-direction: column;*/
+/*  justify-content: center;*/
+/*  align-items: center;*/
+/*  width: 10%;*/
+/*}*/
 
-textarea {
-  width: 100%;
-  height: 100px;
-  resize: none;
-}
+/*textarea {*/
+/*  width: 100%;*/
+/*  height: 100px;*/
+/*  resize: none;*/
+/*}*/

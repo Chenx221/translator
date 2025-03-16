@@ -1,17 +1,18 @@
-require('dotenv').config();
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+import dotenv from 'dotenv';
+dotenv.config();
+import createError from 'http-errors';
+import express from 'express';
+import path from 'path';
+import logger from 'morgan';
 
-var indexRouter = require('./routes/index');
-var translateRouter = require('./routes/translate');
-var docRouter = require('./routes/doc');
-var assetsRouter = require('./routes/assets');
+import indexRouter from './routes/index.js';
+import translateRouter from './routes/translate.js';
+import docRouter from './routes/doc.js';
+import assetsRouter from './routes/assets.js';
+import cookieParser from "cookie-parser";
 
-var app = express();
-
+const app = express();
+const __dirname = import.meta.dirname;
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
@@ -71,4 +72,4 @@ global.services = {
 console.log('Configuration loaded successfully.');
 console.log('DOCUMENTATION: http://localhost:' + (process.env.PORT || 3000));
 
-module.exports = app;
+export default app;

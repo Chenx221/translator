@@ -1,5 +1,5 @@
-const OpenAI = require('openai');
-const axios = require("axios");
+import OpenAI from 'openai';
+import axios from "axios";
 
 class Client {
     static openai = null;
@@ -54,4 +54,4 @@ class Client {
     }
 }
 
-module.exports = Client;
+export default Client;

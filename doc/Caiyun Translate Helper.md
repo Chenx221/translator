@@ -3,7 +3,7 @@ Setup Guide: https://docs.caiyunapp.com/lingocloud-api/
 ENV:
 ```
 TRANSLATION_SERVICES=[caiyun]
-CAIYUN_MT_ENDPOINT=http://api.interpreter.caiyunai.com/v1/translator
+CAIYUN_MT_ENDPOINT=https://api.interpreter.caiyunai.com/v1/translator
 CAIYUN_TOKEN=
 CAIYUN_FROM_TO=
 ```

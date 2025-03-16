@@ -1,6 +1,6 @@
-const axios = require('axios');
-const {v4: uuidv4} = require('uuid');
-const crypto = require('crypto');
+import axios from 'axios';
+import { v4 as uuidv4 } from 'uuid';
+import crypto from 'crypto';
 
 // 有道大模型(LLM)翻译仅支持中英双语，这对GalGame玩家而言基本没啥用
 
@@ -122,4 +122,4 @@ class Client {
     }
 }
 
-module.exports = Client;
+export default Client;

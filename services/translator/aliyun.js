@@ -1,6 +1,6 @@
-const alimt20181012 = require('@alicloud/alimt20181012');
-const OpenApi = require('@alicloud/openapi-client');
-const Util = require('@alicloud/tea-util');
+import alimt20181012 from '@alicloud/alimt20181012';
+import OpenApi from '@alicloud/openapi-client';
+import Util from '@alicloud/tea-util';
 
 class Client {
     static client = null;
@@ -49,4 +49,4 @@ class Client {
     }
 }
 
-module.exports = Client;
+export default Client;

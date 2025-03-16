@@ -1,13 +1,14 @@
-var express = require('express');
-var router = express.Router();
-var fs = require('fs');
-var path = require('path');
-var marked = require('marked');
-var DeepSeekClient = require('../services/ai/deepseek');
+import express from 'express';
+import fs from 'fs';
+import path from 'path';
+import {marked} from 'marked';
+import DeepSeekClient from '../services/ai/deepseek.js';
+
+const router = express.Router();
 
 /* GET markdown file. */
 router.get('/:filename', async function (req, res, next) {
-    const docDir = path.join(__dirname, '../doc');
+    const docDir = path.join(import.meta.dirname, '../doc');
     const filePath = path.join(docDir, req.params.filename);
 
     try {
@@ -38,4 +39,4 @@ function isAI(filename) {
     return filename.startsWith('DeepSeek');
 }
 
-module.exports = router;
+export default router;

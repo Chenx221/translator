@@ -1,4 +1,4 @@
-const crypto = require('crypto');
+import crypto from 'crypto';
 
 class Client {
     static async translate(text) {
@@ -103,4 +103,4 @@ class Client {
 
 }
 
-module.exports = Client;
+export default Client;

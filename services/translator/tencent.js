@@ -1,4 +1,4 @@
-const tencentcloud = require("tencentcloud-sdk-nodejs-tmt");
+import tencentcloud from "tencentcloud-sdk-nodejs-tmt";
 const TmtClient = tencentcloud.tmt.v20180321.Client;
 
 class Client {
@@ -40,4 +40,4 @@ class Client {
     }
 }
 
-module.exports = Client;
+export default Client;

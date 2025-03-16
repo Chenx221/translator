@@ -1,4 +1,4 @@
-const axios = require('axios');
+import axios from 'axios';
 
 class Client {
     static async translate(text) {
@@ -26,4 +26,4 @@ class Client {
     }
 }
 
-module.exports = Client;
+export default Client;
