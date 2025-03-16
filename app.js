@@ -8,6 +8,7 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var translateRouter = require('./routes/translate');
 var docRouter = require('./routes/doc');
+var assetsRouter = require('./routes/assets');
 
 var app = express();
 
@@ -24,6 +25,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/doc', docRouter);
 app.use('/translate', translateRouter);
+app.use('/assets', assetsRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -62,7 +64,7 @@ global.services = {
     youdaoGereral: enabledServices.includes('youdao-general'),
     youdaoLLM: enabledServices.includes('youdao-llm'),
     //TODO:
-    //Deepseek, gemini, openai, ollama...
+    //gemini, openai, ollama...
     //Yandex, 腾讯交互翻译, MOJI, 金山词霸, AI Model, Google, Azure, Bing, Deepl, papago, IBM, systransoft, reverso，Amazon, LibreTranslate...
 };
 

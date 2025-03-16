@@ -1,4 +1,5 @@
 const OpenAI = require('openai');
+const axios = require("axios");
 
 class Client {
     static openai = null;
@@ -31,12 +32,25 @@ class Client {
             ],
             model: "deepseek-chat",
         });
-        // console.log(completion.choices[0].message.content);
         return completion.choices[0].message.content;
     }
 
     static async getModels() {
-        //Todo: Implement this
+        let options = {
+            'method': 'GET',
+            'url': 'https://api.deepseek.com/models',
+            'headers': {
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${process.env.DEEPSEEK_API_KEY}`
+            }
+        };
+        try {
+            const response = await axios(options);
+            return response.data.data.map(model => model.id);
+        } catch (error) {
+            console.error(error.message);
+            throw error;
+        }
     }
 }
 

@@ -1,5 +1,14 @@
 extends layout
 
 block content
-    h1= title
-    div!= content
+    .container
+        h1= title
+        div!= content
+            if isAI
+                h2 Models List
+                if models && models.length > 0
+                    ul.list-group
+                        each model in models
+                            li.list-group-item= model
+                else
+                    p Tips: After configuring the API key, the list of available models will be loaded here. Until then, only this message will be displayed.

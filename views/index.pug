@@ -1,24 +1,23 @@
 extends layout
 
 block content
-    h1= title
-    p Welcome to #{title}
-    p Listening on port #{port}
-    ul
-        each file in files
-            li
-                a(href=`/doc/${file}`) #{file}
-    .translation-container
-        .translation-input
-            div
-                label(for='sourceText') Source Text:
-                textarea(id='sourceText', name='sourceText')
-        .translation-controls
-            button(type='button', onclick='translateText()') Translate
-        .translation-output
-            div
-                label(for='resultText') Translation Result:
-                textarea(id='resultText', readonly='readonly')
+    .container
+        h1= title
+        p Welcome to #{title}
+        p Listening on port #{port}
+        ul.list-group
+            each file in files
+                li.list-group-item
+                    a(href=`/doc/${file}`) #{file}
+        .translation-container
+            .mb-3
+                label(for='sourceText', class='form-label') Source Text:
+                textarea(id='sourceText', name='sourceText', class='form-control', rows='10', cols='50')
+            .mb-3
+                button(type='button', class='btn btn-primary', onclick='translateText()') Translate
+            .mb-3
+                label(for='resultText', class='form-label') Translation Result:
+                textarea(id='resultText', readonly='readonly', class='form-control', rows='10', cols='50')
     script.
         function translateText() {
             const sourceText = document.getElementById('sourceText').value;
