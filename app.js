@@ -51,6 +51,7 @@ if (!process.env.TRANSLATION_SERVICES) {
 
 let enabledServices = process.env.TRANSLATION_SERVICES.split(',');
 global.services = {
+    aliyunFree: enabledServices.includes('aliyun-free'),
     aliyunGeneral: enabledServices.includes('aliyun-general'),
     aliyunProfessional: enabledServices.includes('aliyun-professional'),
     baidu: enabledServices.includes('baidu'),
@@ -67,7 +68,7 @@ global.services = {
     youdaoLLM: enabledServices.includes('youdao-llm'),
     //TODO:
     //openai, ollama...
-    //Yandex, 腾讯交互翻译, MOJI, 金山词霸, AI Model, Google, Azure, Bing, Deepl, papago, IBM, systransoft, reverso，Amazon, LibreTranslate...
+    //Yandex, 腾讯交互翻译, MOJI, 金山词霸, Google, Azure, Bing, Deepl, papago, IBM, systransoft, reverso，Amazon, LibreTranslate...
 };
 
 console.log('Configuration loaded successfully.');

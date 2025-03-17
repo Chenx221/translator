@@ -13,28 +13,42 @@ import YoudaoClient from '../services/translator/youdao.js';
 const router = express.Router();
 
 router.post('/', async (req, res) => {
-    const { text } = req.body;
+    const {text} = req.body;
     const translationPromises = [];
 
     if (global.services.aliyunGeneral) {
-        let resp = await AliyunClient.translate(text, false);
+        let resp = await AliyunClient.translate(text, 'general');
         if (!('statusCode' in resp))
             translationPromises.push('Something went wrong');
-        else if(resp.statusCode !== 200){
-            translationPromises.push(`aliyunGeneral: [${resp.statusCode}] ${resp.error}`);
-        }else{
+        else if (resp.statusCode !== 200) {
+            translationPromises.push(`aliyunGeneral: [ERROR] ${resp.statusCode} ${resp.error}`);
+        } else {
             translationPromises.push(resp.body.data.translated);
         }
     }
 
     if (global.services.aliyunProfessional) {
-        let resp = await AliyunClient.translate(text, true);
+        let resp = await AliyunClient.translate(text, 'pro');
         if (!('statusCode' in resp))
             translationPromises.push('[ERROR] Something went wrong');
-        else if(resp.statusCode !== 200){
-            translationPromises.push(`aliyunGeneral: [${resp.statusCode}] ${resp.error}`);
-        }else{
+        else if (resp.statusCode !== 200) {
+            translationPromises.push(`aliyunGeneral: [ERROR] ${resp.statusCode} ${resp.error}`);
+        } else {
             translationPromises.push(resp.body.data.translated);
+        }
+    }
+
+    if (global.services.aliyunFree) {
+        let resp = await AliyunClient.translate(text, 'free');
+        if (resp.httpStatusCode !== 200) {
+            console.error(`aliyunFree: [ERROR] ${resp.code} ${resp.message}`);
+            translationPromises.push(`aliyunFree: [ERROR] ${resp.httpStatusCode} ${resp.code}`);
+            // Q: Why does the 500 Query csi check not pass error occur?
+            // A: Alibaba has added content censorship to the free API.
+            // If the original text for translation contains sensitive words, the CSI check will fail.
+            // For example, "Donald Trump".
+        } else {
+            translationPromises.push(resp.data.translateText);
         }
     }
 
@@ -99,7 +113,7 @@ router.post('/', async (req, res) => {
         let resp = await volcengineClient.translate(text);
         if (!resp.ResponseMetadata.Error)
             translationPromises.push(resp.TranslationList[0].Translation);
-        else{
+        else {
             console.error(`[ERROR] ${resp.ResponseMetadata.Error.Code}. ${resp.ResponseMetadata.Error.Message} (RequestId: ${resp.ResponseMetadata.RequestId})`);
             translationPromises.push(`volcengine: [ERROR] ${resp.ResponseMetadata.Error.Code}`);
         }
@@ -155,9 +169,9 @@ router.post('/', async (req, res) => {
     try {
         const results = await Promise.all(translationPromises);
         const combinedTranslation = results.join('\u200b\n');
-        res.json({ translation: combinedTranslation });
+        res.json({translation: combinedTranslation});
     } catch (error) {
-        res.status(500).json({ error: 'Translation failed', details: error.message });
+        res.status(500).json({error: 'Translation failed', details: error.message});
     }
 });
 

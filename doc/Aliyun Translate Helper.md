@@ -2,7 +2,7 @@ Setup Guide: https://help.aliyun.com/zh/machine-translation/getting-started/guid
 
 ENV:
 ```
-TRANSLATION_SERVICES=[aliyun-general,aliyun-professional]
+TRANSLATION_SERVICES=[aliyun-free,aliyun-general,aliyun-professional]
 ALIYUN_MT_ENDPOINT=mt.aliyuncs.com
 ALIYUN_ACCESS_KEY_ID=<secret>
 ALIYUN_ACCESS_KEY_SECRET=<secret>
@@ -10,6 +10,11 @@ ALIYUN_SOURCE_LANGUAGE=<language Code>
 ALIYUN_TARGET_LANGUAGE=<language Code>
 ```
 ---
+
+// Q: Why does the 500 Query csi check not pass error occur?  
+// A: Alibaba has added content censorship to the free API.  
+// If the original text for translation contains sensitive words, the CSI check will fail.  
+// For example, "Donald Trump".
 
 | **Language**             | **Code** |
 | ------------------------ | -------- |
