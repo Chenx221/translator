@@ -12,7 +12,7 @@ DEEPSEEK_TARGET_LANGUAGE=
 ```
 ---
 
-**AI translation response is very slow.**
+**AI translation response may be slow.**
 
 - DEEPSEEK_MODEL
 
@@ -20,7 +20,8 @@ DEEPSEEK_TARGET_LANGUAGE=
 		
 		`deepseek-reasoner` is very unstable and I haven't tested it yet.
 		
-		If you have already configured the API key, please check the bottom of this document.
+		If you have already configured the API key, please check the bottom of this document. 
+		Tips: Preview the document through the local API (we will retrieve the list of available models for you).
 
 - DEEPSEEK_PROMPT
 

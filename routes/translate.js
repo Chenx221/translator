@@ -4,8 +4,9 @@ import BaiduClient from '../services/translator/baidu.js';
 import CaiyunClient from '../services/translator/caiyun.js';
 import DeepseekClient from '../services/ai/deepseek.js';
 import GeminiClient from '../services/ai/gemini.js';
-import NiutransClient from '../services/translator/niutrans.js';
 import iFlytekClient from '../services/translator/iflytek.js';
+import NiutransClient from '../services/translator/niutrans.js';
+import OpenaiClient from '../services/ai/openai.js';
 import TencentClient from '../services/translator/tencent.js';
 import volcengineClient from '../services/translator/volcengine.js';
 import YoudaoClient from '../services/translator/youdao.js';
@@ -97,6 +98,16 @@ router.post('/', async (req, res) => {
         else {
             console.error(`[ERROR] ${resp.error_code} ${resp.error_msg}`);
             translationPromises.push('niutrans: [Error] ' + resp.error_code + ' ' + resp.error_msg);
+        }
+    }
+
+    if (global.services.openai) {
+        try {
+            let resp = await OpenaiClient.translate(text);
+            translationPromises.push(parseJsonOrExtractFromAiResponse(resp).translation);
+        } catch (err) {
+            console.error(`[ERROR] ${err.message}`);
+            translationPromises.push('openai: [Error] Please check the console for error details.');
         }
     }
 

@@ -46,10 +46,10 @@ app.use(function (err, req, res, next) {
 
 if (!process.env.TRANSLATION_SERVICES) {
     console.error('Error: TRANSLATION_SERVICES is not defined in .env file. It is possible that the .env file was not read or the format is incorrect.');
-    process.exit(1);
+    console.info('Please refer to the document below to learn how to configure .env. After completing the configuration, restart the service, and you should no longer see this message.');
 }
 
-let enabledServices = process.env.TRANSLATION_SERVICES.split(',');
+let enabledServices = process.env.TRANSLATION_SERVICES?process.env.TRANSLATION_SERVICES.split(','):[];
 global.services = {
     aliyunFree: enabledServices.includes('aliyun-free'),
     aliyunGeneral: enabledServices.includes('aliyun-general'),
@@ -59,6 +59,7 @@ global.services = {
     deepseek: enabledServices.includes('deepseek'),
     gemini: enabledServices.includes('gemini'),
     niutrans: enabledServices.includes('niutrans'),
+    openai: enabledServices.includes('openai'),
     tencent: enabledServices.includes('tencent'),
     volcengine: enabledServices.includes('volcengine'),
     xftransGeneral: enabledServices.includes('xftrans-general'),

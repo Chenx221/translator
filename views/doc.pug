@@ -6,9 +6,39 @@ block content
         div!= content
             if isAI
                 h2 Models List
-                if models && models.length > 0
-                    ul.list-group
-                        each model in models
-                            li.list-group-item= model
-                else
-                    p Tips: After configuring the API key, the list of available models will be loaded here. Until then, only this message will be displayed.
+                    if models && models.length > 0
+                        .table-responsive
+                            table.table.table-striped.table-hover.table-sm.models-table
+                                thead.table-light
+                                    tr
+                                        th Model ID
+                                        th Name
+                                        th Created
+                                        th Description
+                                tbody
+                                    each model in models
+                                        tr
+                                            td= model.id
+                                            td= model.name? model.name : 'No name available'
+                                            td= model.created? new Date(model.created * 1000).toLocaleDateString(): 'No date available'
+                                            td
+                                                span.d-inline-block(data-bs-toggle="tooltip" data-bs-placement="top" title=model.description)
+                                                    | #{model.description ? model.description.substring(0, 50) + '...' : 'No description available'}
+                        script.
+                            document.addEventListener('DOMContentLoaded', function() {
+                                var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+                                var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                                    return new bootstrap.Tooltip(tooltipTriggerEl)
+                                })
+                            });
+                        style.
+                            .models-table {
+                                font-size: 0.9rem;
+                            }
+                            .models-table td, .models-table th {
+                                vertical-align: middle;
+                            }
+                    else
+                        .alert.alert-info
+                            i.bi.bi-info-circle.me-2
+                            span Tips: After configuring the API key, the list of available models will be loaded here.

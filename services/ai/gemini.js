@@ -39,6 +39,7 @@ class Client {
     }
 
     static async getModels() {
+        //@google/genai looks like it doesn't have a method to list models
         let options = {
             'method': 'GET',
             'url': `https://generativelanguage.googleapis.com/v1beta/models?key=${process.env.GEMINI_API_KEY}`,
@@ -49,8 +50,12 @@ class Client {
         try {
             const response = await axios(options);
             return response.data.models
-                .filter(model => model.supportedGenerationMethods.includes("generateContent"))
-                .map(model => model.name.replace(/^models\//, ''));
+                // .filter(model => model.supportedGenerationMethods.includes("generateContent"))
+                .map(model => ({
+                    id: model.name.replace(/^models\//, ''),
+                    name: model.displayName,
+                    description: model.description
+                }));
         } catch (error) {
             console.error(error.message);
             throw error;

@@ -16,7 +16,8 @@ Except for the first request, Gemini's response speed is fairly acceptable (with
 
 - GEMINI_MODEL
 
-		If you have already configured the API key, please check the bottom of this document.
+		If you have already configured the API key, please check the bottom of this document. 
+		Tips: Preview the document through the local API (we will retrieve the list of available models for you).
 
 - GEMINI_PROMPT
 

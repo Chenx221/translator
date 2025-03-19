@@ -4,6 +4,7 @@ import path from 'path';
 import {marked} from 'marked';
 import DeepSeekClient from '../services/ai/deepseek.js';
 import GeminiClient from "../services/ai/gemini.js";
+import OpenaiClient from "../services/ai/openai.js";
 
 const router = express.Router();
 
@@ -15,16 +16,19 @@ router.get('/:filename', async function (req, res, next) {
     try {
         const data = await fs.promises.readFile(filePath, 'utf8');
         const htmlContent = marked.parse(data);
-        let modelList = [];
+        let modelsInfo = [];
         const type = getAIType(req.params.filename);
-        if (type!==null) {
+        if (type !== null) {
             try {
                 switch (type) {
                     case 'DeepSeek':
-                        modelList = await DeepSeekClient.getModels();
+                        modelsInfo = await DeepSeekClient.getModels();
                         break;
                     case 'Gemini':
-                        modelList = await GeminiClient.getModels();
+                        modelsInfo = await GeminiClient.getModels();
+                        break;
+                    case 'OpenAI':
+                        modelsInfo = await OpenaiClient.getModels();
                         break;
                 }
             } catch (error) {
@@ -35,8 +39,8 @@ router.get('/:filename', async function (req, res, next) {
         res.render('doc', {
             title: req.params.filename,
             content: htmlContent,
-            isAI: getAIType(req.params.filename)!==null,
-            models: modelList
+            isAI: getAIType(req.params.filename) !== null,
+            models: modelsInfo
         });
     } catch (err) {
         next(err);
@@ -46,6 +50,7 @@ router.get('/:filename', async function (req, res, next) {
 function getAIType(filename) {
     if (filename.startsWith('DeepSeek')) return 'DeepSeek';
     if (filename.startsWith('Gemini')) return 'Gemini';
+    if (filename.startsWith('OpenAI')) return 'OpenAI';
     return null;
 }
 
