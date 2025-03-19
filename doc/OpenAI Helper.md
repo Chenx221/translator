@@ -39,7 +39,7 @@ OPENAI_TARGET_LANGUAGE=
 
 - OPENAI_PROMPT
 
-		I have already prepared a prompt in the .env. 
+		I have already prepared a global prompt in the .env. 
 		If you have no other requirements, you don't need to set it.
 
 - OPENAI_SOURCE_LANGUAGE、OPENAI_TARGET_LANGUAGE

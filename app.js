@@ -51,6 +51,7 @@ if (!process.env.TRANSLATION_SERVICES) {
 
 let enabledServices = process.env.TRANSLATION_SERVICES?process.env.TRANSLATION_SERVICES.split(','):[];
 global.services = {
+    aliyunAI: enabledServices.includes('aliyun-ai'),
     aliyunFree: enabledServices.includes('aliyun-free'),
     aliyunGeneral: enabledServices.includes('aliyun-general'),
     aliyunProfessional: enabledServices.includes('aliyun-professional'),
@@ -68,7 +69,7 @@ global.services = {
     youdaoGereral: enabledServices.includes('youdao-general'),
     youdaoLLM: enabledServices.includes('youdao-llm'),
     //TODO:
-    //openai, ollama...
+    //Azure, Claude, Mistral, ollama...
     //Yandex, 腾讯交互翻译, MOJI, 金山词霸, Google, Azure, Bing, Deepl, papago, IBM, systransoft, reverso，Amazon, LibreTranslate...
 };
 

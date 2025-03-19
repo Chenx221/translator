@@ -21,7 +21,7 @@ Except for the first request, Gemini's response speed is fairly acceptable (with
 
 - GEMINI_PROMPT
 
-		I have already prepared a prompt in the .env. 
+		I have already prepared a global prompt in the .env. 
 		If you have no other requirements, you don't need to set it.
 
 - GEMINI_SOURCE_LANGUAGE、GEMINI_TARGET_LANGUAGE

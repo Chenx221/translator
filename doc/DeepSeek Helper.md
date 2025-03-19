@@ -25,7 +25,7 @@ DEEPSEEK_TARGET_LANGUAGE=
 
 - DEEPSEEK_PROMPT
 
-		I have already prepared a prompt in the .env. 
+		I have already prepared a global prompt in the .env. 
 		If you have no other requirements, you don't need to set it.
 
 - DEEPSEEK_SOURCE_LANGUAGE、DEEPSEEK_TARGET_LANGUAGE

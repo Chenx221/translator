@@ -7,6 +7,7 @@ import GeminiClient from '../services/ai/gemini.js';
 import iFlytekClient from '../services/translator/iflytek.js';
 import NiutransClient from '../services/translator/niutrans.js';
 import OpenaiClient from '../services/ai/openai.js';
+import OpenaiCompatibleClient from "../services/ai/openai-compatible.js";
 import TencentClient from '../services/translator/tencent.js';
 import volcengineClient from '../services/translator/volcengine.js';
 import YoudaoClient from '../services/translator/youdao.js';
@@ -16,6 +17,48 @@ const router = express.Router();
 router.post('/', async (req, res) => {
     const {text} = req.body;
     const translationPromises = [];
+
+    if (global.services.aliyunAI) {
+        try {
+            const sp = ['qwen-mt-plus', 'qwen-mt-turbo'].includes(process.env.ALIYUN_AI_MODEL);
+            let resp = await OpenaiCompatibleClient.translate({
+                baseURL: process.env.ALIYUN_AI_ENDPOINT,
+                apiKey: process.env.ALIYUN_AI_API_KEY,
+                text,
+                from: process.env.ALIYUN_AI_SOURCE_LANGUAGE,
+                to: process.env.ALIYUN_AI_TARGET_LANGUAGE,
+                model: process.env.ALIYUN_AI_MODEL,
+                prompt: process.env.ALIYUN_AI_PROMPT || process.env.GLOBAL_AI_PROMPT,
+                specificMessage: sp ?
+                    ([{
+                        role: "user", content: text
+                    }])
+                    : null,
+                translation_options: sp ? ({
+                    source_lang: process.env.ALIYUN_AI_SOURCE_LANGUAGE,
+                    target_lang: process.env.ALIYUN_AI_TARGET_LANGUAGE
+                }) : null
+            });
+            translationPromises.push(sp ? resp : parseJsonOrExtractFromAiResponse(resp).translation);
+        } catch (err) {
+            console.error(`[ERROR] ${err.message}`);
+            translationPromises.push('aliyunAI: [Error] Please check the console for error details.');
+        }
+    }
+
+    if (global.services.aliyunFree) {
+        let resp = await AliyunClient.translate(text, 'free');
+        if (resp.httpStatusCode !== 200) {
+            console.error(`aliyunFree: [ERROR] ${resp.code} ${resp.message}`);
+            translationPromises.push(`aliyunFree: [ERROR] ${resp.httpStatusCode} ${resp.code}`);
+            // Q: Why does the 500 Query csi check not pass error occur?
+            // A: Alibaba has added content censorship to the free API.
+            // If the original text for translation contains sensitive words, the CSI check will fail.
+            // For example, "Donald Trump".
+        } else {
+            translationPromises.push(resp.data.translateText);
+        }
+    }
 
     if (global.services.aliyunGeneral) {
         let resp = await AliyunClient.translate(text, 'general');
@@ -36,20 +79,6 @@ router.post('/', async (req, res) => {
             translationPromises.push(`aliyunGeneral: [ERROR] ${resp.statusCode} ${resp.error}`);
         } else {
             translationPromises.push(resp.body.data.translated);
-        }
-    }
-
-    if (global.services.aliyunFree) {
-        let resp = await AliyunClient.translate(text, 'free');
-        if (resp.httpStatusCode !== 200) {
-            console.error(`aliyunFree: [ERROR] ${resp.code} ${resp.message}`);
-            translationPromises.push(`aliyunFree: [ERROR] ${resp.httpStatusCode} ${resp.code}`);
-            // Q: Why does the 500 Query csi check not pass error occur?
-            // A: Alibaba has added content censorship to the free API.
-            // If the original text for translation contains sensitive words, the CSI check will fail.
-            // For example, "Donald Trump".
-        } else {
-            translationPromises.push(resp.data.translateText);
         }
     }
 

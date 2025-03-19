@@ -5,6 +5,7 @@ import {marked} from 'marked';
 import DeepSeekClient from '../services/ai/deepseek.js';
 import GeminiClient from "../services/ai/gemini.js";
 import OpenaiClient from "../services/ai/openai.js";
+import OpenaiCompatibleClient from "../services/ai/openai-compatible.js";
 
 const router = express.Router();
 
@@ -30,6 +31,9 @@ router.get('/:filename', async function (req, res, next) {
                     case 'OpenAI':
                         modelsInfo = await OpenaiClient.getModels();
                         break;
+                    case 'Aliyun AI':
+                        modelsInfo = await OpenaiCompatibleClient.getModels(process.env.ALIYUN_AI_ENDPOINT, process.env.ALIYUN_AI_API_KEY);
+                        break;
                 }
             } catch (error) {
                 console.error(`Failed to fetch ${type} models:`, error.message);
@@ -51,6 +55,7 @@ function getAIType(filename) {
     if (filename.startsWith('DeepSeek')) return 'DeepSeek';
     if (filename.startsWith('Gemini')) return 'Gemini';
     if (filename.startsWith('OpenAI')) return 'OpenAI';
+    if (filename.startsWith('Aliyun AI')) return 'Aliyun AI';
     return null;
 }
 
