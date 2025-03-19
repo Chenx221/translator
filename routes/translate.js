@@ -9,6 +9,7 @@ import NiutransClient from '../services/translator/niutrans.js';
 import OpenaiClient from '../services/ai/openai.js';
 import OpenaiCompatibleClient from "../services/ai/openai-compatible.js";
 import TencentClient from '../services/translator/tencent.js';
+import TencentTransmartClient from '../services/translator/tencent-transmart.js';
 import volcengineClient from '../services/translator/volcengine.js';
 import YoudaoClient from '../services/translator/youdao.js';
 
@@ -140,12 +141,21 @@ router.post('/', async (req, res) => {
         }
     }
 
-    if (global.services.tencent) {
+    if (global.services.tencentGeneral) {
         try {
             let resp = await TencentClient.translate(text);
             translationPromises.push(resp.TargetText);
         } catch (err) {
             translationPromises.push('tencent: [ERROR] ' + err.code);
+        }
+    }
+
+    if (global.services.tencentTransmart) {
+        try {
+            let resp = await TencentTransmartClient.translate(text);
+            translationPromises.push(resp.auto_translation[0]);
+        } catch (err) {
+            translationPromises.push('tencentTransmart: [ERROR] ');
         }
     }
 

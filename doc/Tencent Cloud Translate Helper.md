@@ -2,7 +2,7 @@ Setup Guide: https://cloud.tencent.com/document/product/551/104415
 
 ENV:
 ```
-TRANSLATION_SERVICES=[tencent]
+TRANSLATION_SERVICES=[tencent-general]
 TENCENT_MT_ENDPOINT=mt.tencentcloudapi.com
 TENCENT_MT_REGION=<region code>
 TENCENT_SECRET_ID=<your_secret_id>
