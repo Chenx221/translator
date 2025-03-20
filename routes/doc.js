@@ -34,6 +34,17 @@ router.get('/:filename', async function (req, res, next) {
                     case 'Aliyun AI':
                         modelsInfo = await OpenaiCompatibleClient.getModels(process.env.ALIYUN_AI_ENDPOINT, process.env.ALIYUN_AI_API_KEY);
                         break;
+                    case 'Tencent AI':
+                        modelsInfo = await OpenaiCompatibleClient.getModels(process.env.TENCENT_AI_ENDPOINT, process.env.TENCENT_AI_API_KEY);
+                        modelsInfo.push({
+                            id: 'hunyuan-translation',
+                            created: Math.floor(new Date('2024-10-25').getTime() / 1000),
+                        });
+                        modelsInfo.push({
+                            id: 'hunyuan-translation-lite',
+                            created: Math.floor(new Date('2024-11-25').getTime() / 1000),
+                        });
+                        break;
                 }
             } catch (error) {
                 console.error(`Failed to fetch ${type} models:`, error.message);
@@ -56,6 +67,7 @@ function getAIType(filename) {
     if (filename.startsWith('Gemini')) return 'Gemini';
     if (filename.startsWith('OpenAI')) return 'OpenAI';
     if (filename.startsWith('Aliyun AI')) return 'Aliyun AI';
+    if (filename.startsWith('Tencent AI')) return 'Tencent AI';
     return null;
 }
 

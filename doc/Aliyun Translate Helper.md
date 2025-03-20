@@ -14,7 +14,10 @@ ALIYUN_TARGET_LANGUAGE=<language Code>
 // Q: Why does the 500 Query csi check not pass error occur?  
 // A: Alibaba has added content censorship to the free API.  
 // If the original text for translation contains sensitive words, the CSI check will fail.  
+// This check mainly focuses on political content.
 // For example, "Donald Trump".
+
+// Additionally, the free API has a daily call limit (IP restricted).
 
 | **Language**             | **Code** |
 | ------------------------ | -------- |

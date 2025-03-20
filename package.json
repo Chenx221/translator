@@ -23,6 +23,7 @@
     "morgan": "~1.9.1",
     "openai": "^4.87.3",
     "pug": "3.0.3",
+    "tencentcloud-sdk-nodejs-hunyuan": "^4.0.1054",
     "tencentcloud-sdk-nodejs-tmt": "^4.0.1027",
     "uuid": "^11.1.0"
   }

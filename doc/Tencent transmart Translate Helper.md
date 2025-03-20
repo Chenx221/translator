@@ -10,6 +10,9 @@ TENCENT_TS_TARGET_LANGUAGE=<target language code>
 ```
 ---
 
+// "business error" may indicate that the content moderation check failed due to sensitive words.
+// This check mainly focuses on adult and explicit content.
+
 | Language    | Code |
 | ----------- | ---- |
 | Auto Detect | auto |

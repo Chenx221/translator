@@ -61,6 +61,7 @@ global.services = {
     gemini: enabledServices.includes('gemini'),
     niutrans: enabledServices.includes('niutrans'),
     openai: enabledServices.includes('openai'),
+    tencentAI: enabledServices.includes('tencent-ai'),
     tencentGeneral: enabledServices.includes('tencent-general'),
     tencentTransmart: enabledServices.includes('tencent-transmart'),
     volcengine: enabledServices.includes('volcengine'),

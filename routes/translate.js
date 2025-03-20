@@ -4,6 +4,7 @@ import BaiduClient from '../services/translator/baidu.js';
 import CaiyunClient from '../services/translator/caiyun.js';
 import DeepseekClient from '../services/ai/deepseek.js';
 import GeminiClient from '../services/ai/gemini.js';
+import HunyuanClient from '../services/ai/hunyuan.js';
 import iFlytekClient from '../services/translator/iflytek.js';
 import NiutransClient from '../services/translator/niutrans.js';
 import OpenaiClient from '../services/ai/openai.js';
@@ -138,6 +139,34 @@ router.post('/', async (req, res) => {
         } catch (err) {
             console.error(`[ERROR] ${err.message}`);
             translationPromises.push('openai: [Error] Please check the console for error details.');
+        }
+    }
+
+    if (global.services.tencentAI) {
+        const sp = ['hunyuan-translation', 'hunyuan-translation-lite'].includes(process.env.TENCENT_AI_MODEL);
+        try {
+            if(sp){
+                let resp = await HunyuanClient.translate(text);
+                translationPromises.push(resp.Choices[0].Message.Content);
+            }else{
+                let resp = await OpenaiCompatibleClient.translate({
+                    baseURL: process.env.TENCENT_AI_ENDPOINT,
+                    apiKey: process.env.TENCENT_AI_API_KEY,
+                    text,
+                    from: process.env.TENCENT_AI_SOURCE_LANGUAGE,
+                    to: process.env.TENCENT_AI_TARGET_LANGUAGE,
+                    model: process.env.TENCENT_AI_MODEL,
+                    prompt: process.env.TENCENT_AI_PROMPT || process.env.GLOBAL_AI_PROMPT,
+                    specificMessage: null,
+                    translation_options: {
+                        enable_enhancement: false, // disable search?
+                    }
+                });
+                translationPromises.push(sp ? resp : parseJsonOrExtractFromAiResponse(resp).translation);
+            }
+        } catch (err) {
+            console.error(`[ERROR] ${err.message}`);
+            translationPromises.push('tencentAI: [Error] Please check the console for error details.');
         }
     }
 
