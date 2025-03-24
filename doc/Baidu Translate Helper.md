@@ -2,7 +2,7 @@ Setup Guide: https://cloud.baidu.com/doc/MT/s/2l317egif
 
 ENV:
 ```
-TRANSLATION_SERVICES=[baidu]
+TRANSLATION_SERVICES=[baidu-general]
 BAIDU_MT_ENDPOINT=https://aip.baidubce.com/rpc/2.0/mt/texttrans/v1  
 BAIDU_API_KEY=
 BAIDU_SECRET_KEY=

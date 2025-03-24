@@ -84,7 +84,27 @@ router.post('/', async (req, res) => {
         }
     }
 
-    if (global.services.baidu) {
+    if (global.services.baiduAI) {
+        try {
+            let resp = await OpenaiCompatibleClient.translate({
+                baseURL: process.env.BAIDU_AI_ENDPOINT,
+                apiKey: process.env.BAIDU_AI_API_KEY,
+                text,
+                from: process.env.BAIDU_AI_SOURCE_LANGUAGE,
+                to: process.env.BAIDU_AI_TARGET_LANGUAGE,
+                model: process.env.BAIDU_AI_MODEL,
+                prompt: process.env.BAIDU_AI_PROMPT || process.env.GLOBAL_AI_PROMPT,
+                specificMessage: null,
+                translation_options: null
+            });
+            translationPromises.push(parseJsonOrExtractFromAiResponse(resp).translation);
+        } catch (err) {
+            console.error(`[ERROR] ${err.message}`);
+            translationPromises.push('tencentAI: [Error] Please check the console for error details.');
+        }
+    }
+
+    if (global.services.baiduGeneral) {
         try {
             let resp = await BaiduClient.translate(text);
             translationPromises.push(resp.result.trans_result[0].dst);
@@ -145,10 +165,10 @@ router.post('/', async (req, res) => {
     if (global.services.tencentAI) {
         const sp = ['hunyuan-translation', 'hunyuan-translation-lite'].includes(process.env.TENCENT_AI_MODEL);
         try {
-            if(sp){
+            if (sp) {
                 let resp = await HunyuanClient.translate(text);
                 translationPromises.push(resp.Choices[0].Message.Content);
-            }else{
+            } else {
                 let resp = await OpenaiCompatibleClient.translate({
                     baseURL: process.env.TENCENT_AI_ENDPOINT,
                     apiKey: process.env.TENCENT_AI_API_KEY,

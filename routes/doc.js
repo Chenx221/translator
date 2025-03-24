@@ -45,6 +45,9 @@ router.get('/:filename', async function (req, res, next) {
                             created: Math.floor(new Date('2024-11-25').getTime() / 1000),
                         });
                         break;
+                    // case 'Baidu AI':
+                    //     modelsInfo = await OpenaiCompatibleClient.getModels(process.env.BAIDU_AI_ENDPOINT, process.env.BAIDU_AI_API_KEY);
+                    //     break;
                 }
             } catch (error) {
                 console.error(`Failed to fetch ${type} models:`, error.message);
@@ -68,6 +71,7 @@ function getAIType(filename) {
     if (filename.startsWith('OpenAI')) return 'OpenAI';
     if (filename.startsWith('Aliyun AI')) return 'Aliyun AI';
     if (filename.startsWith('Tencent AI')) return 'Tencent AI';
+    // if (filename.startsWith('Baidu AI')) return 'Baidu AI';
     return null;
 }
 
