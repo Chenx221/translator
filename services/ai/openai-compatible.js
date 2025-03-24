@@ -22,7 +22,7 @@ class Client {
                                translation_options = null
                            }) {
         let client = this.createClient(baseURL, apiKey);
-        const completion = await client.chat.completions.create({
+        let params = {
             messages: specificMessage ?? [
                 {
                     role: "system", content: prompt
@@ -36,9 +36,13 @@ class Client {
                 }
             ],
             model: model,
+        };
+        if (translation_options) {
             // @ts-expect-error aliyun specific
-            translation_options: translation_options
-        });
+            params.translation_options = translation_options;
+        }
+
+        const completion = await client.chat.completions.create(params);
         return completion.choices[0].message.content;
     }
 

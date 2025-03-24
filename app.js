@@ -60,6 +60,7 @@ global.services = {
     caiyun: enabledServices.includes('caiyun'),
     deepseek: enabledServices.includes('deepseek'),
     gemini: enabledServices.includes('gemini'),
+    huaweiAI: enabledServices.includes('huawei-ai'),
     niutrans: enabledServices.includes('niutrans'),
     openai: enabledServices.includes('openai'),
     tencentAI: enabledServices.includes('tencent-ai'),
@@ -73,7 +74,9 @@ global.services = {
     youdaoGereral: enabledServices.includes('youdao-general'),
     youdaoLLM: enabledServices.includes('youdao-llm'),
     //TODO:
-    //Azure, Claude, Mistral, ollama...
+    //硅基流动、ollama
+    //题外话: 到底是哪个鬼才想出来的名字？这"硅基流动"听上去总感觉怪怪的...
+    //Azure, Claude, Mistral...
     //Yandex, 腾讯交互翻译, MOJI, 金山词霸, Google, Azure, Bing, Deepl, papago, IBM, systransoft, reverso，Amazon, LibreTranslate...
 };
 

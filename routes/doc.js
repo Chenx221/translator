@@ -51,6 +51,9 @@ router.get('/:filename', async function (req, res, next) {
                     // case 'volcengine AI':
                     //     modelsInfo = await OpenaiCompatibleClient.getModels(process.env.VOLCENGINE_AI_ENDPOINT, process.env.VOLCENGINE_AI_API_KEY);
                     //     break;
+                    // case 'Huawei AI':
+                    //     modelsInfo = await OpenaiCompatibleClient.getModels(process.env.HUAWEI_AI_ENDPOINT, process.env.HUAWEI_AI_API_KEY);
+                    //     break;
                 }
             } catch (error) {
                 console.error(`Failed to fetch ${type} models:`, error.message);
@@ -74,8 +77,12 @@ function getAIType(filename) {
     if (filename.startsWith('OpenAI')) return 'OpenAI';
     if (filename.startsWith('Aliyun AI')) return 'Aliyun AI';
     if (filename.startsWith('Tencent AI')) return 'Tencent AI';
+    // Q: Why comment them out?
+    // A: They are partially compatible with the OpenAI SDK, but the API for listing available models is missing.
+    // I’m not going to waste my time fixing the compatibility issues caused by these platforms.
     // if (filename.startsWith('Baidu AI')) return 'Baidu AI';
     // if (filename.startsWith('volcengine AI')) return 'volcengine AI';
+    // if (filename.startsWith('Huawei AI')) return 'Huawei AI';
     return null;
 }
 

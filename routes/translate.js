@@ -93,9 +93,7 @@ router.post('/', async (req, res) => {
                 from: process.env.BAIDU_AI_SOURCE_LANGUAGE,
                 to: process.env.BAIDU_AI_TARGET_LANGUAGE,
                 model: process.env.BAIDU_AI_MODEL,
-                prompt: process.env.BAIDU_AI_PROMPT || process.env.GLOBAL_AI_PROMPT,
-                specificMessage: null,
-                translation_options: null
+                prompt: process.env.BAIDU_AI_PROMPT || process.env.GLOBAL_AI_PROMPT
             });
             translationPromises.push(parseJsonOrExtractFromAiResponse(resp).translation);
         } catch (err) {
@@ -139,6 +137,24 @@ router.post('/', async (req, res) => {
         } catch (err) {
             console.error(`[ERROR] ${err.message}`);
             translationPromises.push('deepseek: [Error] Please check the console for error details.');
+        }
+    }
+
+    if (global.services.huaweiAI) {
+        try {
+            let resp = await OpenaiCompatibleClient.translate({
+                baseURL: process.env.HUAWEI_AI_ENDPOINT,
+                apiKey: process.env.HUAWEI_AI_API_KEY,
+                text,
+                from: process.env.HUAWEI_AI_SOURCE_LANGUAGE,
+                to: process.env.HUAWEI_AI_TARGET_LANGUAGE,
+                model: process.env.HUAWEI_AI_MODEL,
+                prompt: process.env.HUAWEI_AI_PROMPT || process.env.GLOBAL_AI_PROMPT
+            });
+            translationPromises.push(parseJsonOrExtractFromAiResponse(resp).translation);
+        } catch (err) {
+            console.error(`[ERROR] ${err.message}`);
+            translationPromises.push('huaweiAI: [Error] Please check the console for error details.');
         }
     }
 
