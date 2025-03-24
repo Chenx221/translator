@@ -1,3 +1,5 @@
+aka 百度千帆ModelBuilder
+
 Setup Guide: https://cloud.baidu.com/doc/WENXINWORKSHOP/s/Um2wxbaps#%E6%AD%A5%E9%AA%A4%E4%BA%8C-%E8%8E%B7%E5%8F%96api-key
 
 ENV:
@@ -18,6 +20,8 @@ BAIDU_AI_TARGET_LANGUAGE=
 		You don't need to modify it unless baidu actually changes the API.
 
 - BAIDU_AI_MODEL
+
+https://cloud.baidu.com/doc/WENXINWORKSHOP/s/Fm2vrveyu#%E6%94%AF%E6%8C%81%E6%A8%A1%E5%9E%8B%E5%88%97%E8%A1%A8
 
 | name                | description                           | value(BAIDU_AI_MODEL)                 |
 | ------------------- | ------------------------------------- | ------------------------------------- |

@@ -100,7 +100,7 @@ router.post('/', async (req, res) => {
             translationPromises.push(parseJsonOrExtractFromAiResponse(resp).translation);
         } catch (err) {
             console.error(`[ERROR] ${err.message}`);
-            translationPromises.push('tencentAI: [Error] Please check the console for error details.');
+            translationPromises.push('baiduAI: [Error] Please check the console for error details.');
         }
     }
 
@@ -208,7 +208,27 @@ router.post('/', async (req, res) => {
         }
     }
 
-    if (global.services.volcengine) {
+    if (global.services.volcengineAI) {
+        try {
+            let resp = await OpenaiCompatibleClient.translate({
+                baseURL: process.env.VOLCENGINE_AI_ENDPOINT,
+                apiKey: process.env.VOLCENGINE_AI_API_KEY,
+                text,
+                from: process.env.VOLCENGINE_AI_SOURCE_LANGUAGE,
+                to: process.env.VOLCENGINE_AI_TARGET_LANGUAGE,
+                model: process.env.VOLCENGINE_AI_MODEL,
+                prompt: process.env.VOLCENGINE_AI_PROMPT || process.env.GLOBAL_AI_PROMPT,
+                specificMessage: null,
+                translation_options: null
+            });
+            translationPromises.push(parseJsonOrExtractFromAiResponse(resp).translation);
+        } catch (err) {
+            console.error(`[ERROR] ${err.message}`);
+            translationPromises.push('volcengineAI: [Error] Please check the console for error details.');
+        }
+    }
+
+    if (global.services.volcengineGeneral) {
         let resp = await volcengineClient.translate(text);
         if (!resp.ResponseMetadata.Error)
             translationPromises.push(resp.TranslationList[0].Translation);

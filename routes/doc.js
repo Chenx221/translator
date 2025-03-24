@@ -48,6 +48,9 @@ router.get('/:filename', async function (req, res, next) {
                     // case 'Baidu AI':
                     //     modelsInfo = await OpenaiCompatibleClient.getModels(process.env.BAIDU_AI_ENDPOINT, process.env.BAIDU_AI_API_KEY);
                     //     break;
+                    // case 'volcengine AI':
+                    //     modelsInfo = await OpenaiCompatibleClient.getModels(process.env.VOLCENGINE_AI_ENDPOINT, process.env.VOLCENGINE_AI_API_KEY);
+                    //     break;
                 }
             } catch (error) {
                 console.error(`Failed to fetch ${type} models:`, error.message);
@@ -72,6 +75,7 @@ function getAIType(filename) {
     if (filename.startsWith('Aliyun AI')) return 'Aliyun AI';
     if (filename.startsWith('Tencent AI')) return 'Tencent AI';
     // if (filename.startsWith('Baidu AI')) return 'Baidu AI';
+    // if (filename.startsWith('volcengine AI')) return 'volcengine AI';
     return null;
 }
 

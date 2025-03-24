@@ -4,7 +4,7 @@ Setup Guide: https://www.volcengine.com/docs/4640/130872
 
 ENV:
 ```
-TRANSLATION_SERVICES=[volcengine]
+TRANSLATION_SERVICES=[volcengine-general]
 VOLCENGINE_MT_ENDPOINT=translate.volcengineapi.com  
 VOLCENGINE_ACCESS_KEY_ID=  
 VOLCENGINE_SECRET_ACCESS_KEY=  
