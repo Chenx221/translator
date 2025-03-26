@@ -16,7 +16,9 @@ block content
             .mb-3
                 button(type='button', class='btn btn-primary', onclick='translateText()') Translate
             .mb-3
-                label(for='resultText', class='form-label') Translation Result:
+                .d-flex.align-items-center.justify-content-between
+                    label(for='resultText', class='form-label') Translation Result:
+                    span(id='translationTime', class='text-muted')
                 textarea(id='resultText', readonly='readonly', class='form-control', rows='10', cols='50')
     script.
         function translateText() {
@@ -26,6 +28,8 @@ block content
                 return;
             }
             const url = window.location.origin + '/translate';
+            const startTime = performance.now();
+            document.getElementById('translationTime').textContent = 'Translating...';
 
             fetch(url, {
                 method: 'POST',
@@ -34,9 +38,17 @@ block content
                 },
                 body: JSON.stringify({text: sourceText})
             })
-                .then(response => response.json())
+                .then(response => {
+                    document.getElementById('translationTime').textContent = `Time: ${response.headers.get('X-Response-Time')+'ms' || 'N/A'}`;
+                    return response.json();
+                })
                 .then(data => {
+                    const endTime = performance.now();
+                    document.getElementById('translationTime').textContent = `Time: ${Math.round(endTime - startTime)}ms`;
                     document.getElementById('resultText').value = data.translation;
                 })
-                .catch(error => console.error('Error:', error));
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.getElementById('translationTime').textContent = 'Request failed';
+                });
         }
