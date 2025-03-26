@@ -16,11 +16,11 @@ OPENAI_TARGET_LANGUAGE=
 
 **AI service providers that have been tested:**
 
-| Provider   | Support Status |
-| ---------- | -------------- |
-| OpenAI     | ✔              |
-| OpenRouter | ✔              |
-|            |                |
+| Provider    | Support Status | Endpoint                      | Note     |
+| ----------- | -------------- | ----------------------------- | -------- |
+| OpenAI      | ✔              | https://api.openai.com/v1     | official |
+| OpenRouter  | ✔              | https://openrouter.ai/api/v1  |          |
+| siliconflow | ✔              | https://api.siliconflow.cn/v1 | slow     |
 
 
 ---
