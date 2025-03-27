@@ -12,6 +12,7 @@ import OpenaiCompatibleClient from "../services/ai/openai-compatible.js";
 import TencentClient from '../services/translator/tencent.js';
 import TencentTransmartClient from '../services/translator/tencent-transmart.js';
 import volcengineClient from '../services/translator/volcengine.js';
+import YandexClient from '../services/translator/yandex.js';
 import YoudaoClient from '../services/translator/youdao.js';
 
 const router = express.Router();
@@ -278,6 +279,43 @@ router.post('/', async (req, res) => {
             translationPromises.push(resp.TargetText);
         } catch (err) {
             translationPromises.push(`xftransNiutrans: [ERROR] ${err.status} ${err.response.statusText}`);
+        }
+    }
+
+    if (global.services.yandexFree) {
+        throw new Error("Not implemented");
+        //The captcha issue has not been resolved, so this is still not implemented.
+
+        // let resp = await YandexClient.translate(text,0);
+        // if(resp.type && resp.type==='captcha'){
+        //     translationPromises.push('yandex: [Error] Captcha required');
+        // }
+        // else if (resp.code === undefined)
+        //     translationPromises.push(resp.text[0]);
+        // else {
+        //     console.error(`[ERROR] ${resp.code} ${resp.error_msg}`);
+        //     translationPromises.push('yandex: [Error] ' + resp.error_code + ' ' + resp.error_msg);
+        // }
+    }
+
+    if (global.services.yandexPaid) {
+        throw new Error("Not implemented");
+        // let resp = await YandexClient.translate(text,1);
+        // if (resp.error_code === undefined)
+        //     translationPromises.push(resp.tgt_text);
+        // else {
+        //     console.error(`[ERROR] ${resp.error_code} ${resp.error_msg}`);
+        //     translationPromises.push('yandex: [Error] ' + resp.error_code + ' ' + resp.error_msg);
+        // }
+    }
+
+    if (global.services.yandexBrowser) {
+        let resp = await YandexClient.translate(text,2);
+        if (!resp.error_code)
+            translationPromises.push(resp.text[0]);
+        else {
+            console.error(`[ERROR] ${resp.error_code} ${resp.error_msg}`);
+            translationPromises.push('yandex: [Error] ' + resp.error_code + ' ' + resp.error_msg);
         }
     }
 

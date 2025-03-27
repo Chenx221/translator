@@ -71,6 +71,9 @@ global.services = {
     xftransGeneral: enabledServices.includes('xftrans-general'),
     xftransNew: enabledServices.includes('xftrans-new'),
     xftransNiutrans: enabledServices.includes('xftrans-niutrans'),
+    yandexFree: enabledServices.includes('yandex-free'),
+    yandexPaid: enabledServices.includes('yandex-paid'),
+    yandexBrowser: enabledServices.includes('yandex-browser'),
     youdaoGereral: enabledServices.includes('youdao-general'),
     youdaoLLM: enabledServices.includes('youdao-llm'),
     //TODO:
