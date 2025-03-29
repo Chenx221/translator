@@ -2,6 +2,7 @@ import express from 'express';
 import AliyunClient from '../services/translator/aliyun.js';
 import BaiduClient from '../services/translator/baidu.js';
 import CaiyunClient from '../services/translator/caiyun.js';
+import DeeplClient from '../services/translator/deepl.js';
 import DeepseekClient from '../services/ai/deepseek.js';
 import GeminiClient from '../services/ai/gemini.js';
 import HunyuanClient from '../services/ai/hunyuan.js';
@@ -118,6 +119,39 @@ router.post('/', async (req, res) => {
             translationPromises.push(resp.target);
         } catch (err) {
             translationPromises.push('caiyun: [Error] ' + err.response.status + ' ' + err.response.statusText);
+        }
+    }
+
+    if (global.services.deeplFree) {
+        try {
+            let resp = await DeeplClient.translate(text,0);
+            translationPromises.push(resp);
+        } catch (err) {
+            console.error(`[ERROR] ${err.message}`);
+            translationPromises.push('deepl: [Error]');
+        }
+    }
+
+    if (global.services.deeplFree2) {
+        throw new Error("Not implemented");
+        // Note: `deepl-free2` is not yet complete because after just a few test requests, DeepL banned my IP for making too many requests.
+
+        // try {
+        //     let resp = await DeeplClient.translate(text,2);
+        //     translationPromises.push(resp);
+        // } catch (err) {
+        //     console.error(`[ERROR] ${err.message}`);
+        //     translationPromises.push('deepl: [Error]');
+        // }
+    }
+
+    if (global.services.deeplPaid) {
+        try {
+            let resp = await DeeplClient.translate(text,1);
+            translationPromises.push(resp);
+        } catch (err) {
+            console.error(`[ERROR] ${err.message}`);
+            translationPromises.push('deepl: [Error]');
         }
     }
 

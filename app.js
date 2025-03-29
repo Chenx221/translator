@@ -58,6 +58,9 @@ global.services = {
     baiduAI: enabledServices.includes('baidu-ai'),
     baiduGeneral: enabledServices.includes('baidu-general'),
     caiyun: enabledServices.includes('caiyun'),
+    deeplFree: enabledServices.includes('deepl-free'),
+    deeplPaid: enabledServices.includes('deepl-paid'),
+    deeplFree2: enabledServices.includes('deepl-free2'), // not implemented yet
     deepseek: enabledServices.includes('deepseek'),
     gemini: enabledServices.includes('gemini'),
     huaweiAI: enabledServices.includes('huawei-ai'),
