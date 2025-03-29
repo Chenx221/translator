@@ -65,6 +65,7 @@ global.services = {
     gemini: enabledServices.includes('gemini'),
     huaweiAI: enabledServices.includes('huawei-ai'),
     niutrans: enabledServices.includes('niutrans'),
+    ollama: enabledServices.includes('ollama'),
     openai: enabledServices.includes('openai'),
     tencentAI: enabledServices.includes('tencent-ai'),
     tencentGeneral: enabledServices.includes('tencent-general'),
@@ -80,7 +81,6 @@ global.services = {
     youdaoGereral: enabledServices.includes('youdao-general'),
     youdaoLLM: enabledServices.includes('youdao-llm'),
     //TODO:
-    //ollama
     //Azure, Claude, Mistral...
     //Yandex, MOJI, 金山词霸, Google, Azure, Bing, Deepl, papago, IBM, systransoft, reverso，Amazon, LibreTranslate...
 };

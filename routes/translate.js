@@ -8,6 +8,7 @@ import GeminiClient from '../services/ai/gemini.js';
 import HunyuanClient from '../services/ai/hunyuan.js';
 import iFlytekClient from '../services/translator/iflytek.js';
 import NiutransClient from '../services/translator/niutrans.js';
+import OllamaClient from '../services/ai/ollama.js';
 import OpenaiClient from '../services/ai/openai.js';
 import OpenaiCompatibleClient from "../services/ai/openai-compatible.js";
 import TencentClient from '../services/translator/tencent.js';
@@ -200,6 +201,37 @@ router.post('/', async (req, res) => {
         else {
             console.error(`[ERROR] ${resp.error_code} ${resp.error_msg}`);
             translationPromises.push('niutrans: [Error] ' + resp.error_code + ' ' + resp.error_msg);
+        }
+    }
+
+    if (global.services.ollama) {
+        try {
+            let resp = await OllamaClient.translate(text);
+            for (const respElement of resp) {
+                if(respElement.model.startsWith('hf.co/SakuraLLM')){
+                    // 空白? 换个更低级别的模型，这个模型你的GPU驾驭不了
+                    translationPromises.push(respElement.content);
+                    continue;
+                }
+                const data = parseJsonOrExtractFromAiResponse(respElement.content);
+                if(data==null){
+                    translationPromises.push(`ollama: ${respElement.model}: ERROR`);
+                    console.error(`ollama: ${respElement.model}: ERROR. Detail: ${respElement.content}`);//这个模型太垃圾了
+                }
+                else if(data.translation)
+                    translationPromises.push(data.translation);
+                else if (data.message)
+                    translationPromises.push(data.message);
+                else if (data.text)
+                    translationPromises.push(data.text);
+                else{
+                    translationPromises.push(`ollama: ${respElement.model}: ERROR`);
+                    console.error(`ollama: ${respElement.model}: ERROR. Detail: ${data}`);//这个模型垃圾/文本太长
+                }
+            }
+        } catch (err) {
+            console.error(`[ERROR] ${err.message}`);
+            translationPromises.push('ollama: [Error] Please check the console for error details.');
         }
     }
 

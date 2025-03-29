@@ -4,6 +4,7 @@ import path from 'path';
 import {marked} from 'marked';
 import DeepSeekClient from '../services/ai/deepseek.js';
 import GeminiClient from "../services/ai/gemini.js";
+import OllamaClient from "../services/ai/ollama.js";
 import OpenaiClient from "../services/ai/openai.js";
 import OpenaiCompatibleClient from "../services/ai/openai-compatible.js";
 
@@ -19,6 +20,7 @@ router.get('/:filename', async function (req, res, next) {
         const htmlContent = marked.parse(data);
         let modelsInfo = [];
         const type = getAIType(req.params.filename);
+        var errorMsg = null;
         if (type !== null) {
             try {
                 switch (type) {
@@ -54,9 +56,20 @@ router.get('/:filename', async function (req, res, next) {
                     // case 'Huawei AI':
                     //     modelsInfo = await OpenaiCompatibleClient.getModels(process.env.HUAWEI_AI_ENDPOINT, process.env.HUAWEI_AI_API_KEY);
                     //     break;
+                    case 'Ollama':
+                        modelsInfo = await OllamaClient.getModels();
+                        modelsInfo = modelsInfo.map(model => {
+                            return {
+                                id: model.model,
+                                name: model.name,
+                                created: Math.floor(new Date(model.modified_at).getTime() / 1000),
+                            };
+                        });
+                        break;
                 }
             } catch (error) {
-                console.error(`Failed to fetch ${type} models:`, error.message);
+                errorMsg = `${error.message} ${error.cause.code}`
+                console.error(`Failed to fetch ${type} models:`, error.message, error.cause.code);
             }
         }
 
@@ -64,7 +77,8 @@ router.get('/:filename', async function (req, res, next) {
             title: req.params.filename,
             content: htmlContent,
             isAI: getAIType(req.params.filename) !== null,
-            models: modelsInfo
+            models: modelsInfo,
+            errorMsg: errorMsg,
         });
     } catch (err) {
         next(err);
@@ -83,6 +97,7 @@ function getAIType(filename) {
     // if (filename.startsWith('Baidu AI')) return 'Baidu AI';
     // if (filename.startsWith('volcengine AI')) return 'volcengine AI';
     // if (filename.startsWith('Huawei AI')) return 'Huawei AI';
+    if (filename.startsWith('Ollama')) return 'Ollama';
     return null;
 }
 
