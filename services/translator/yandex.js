@@ -1,41 +1,33 @@
 import axios from 'axios';
+import { v4 as uuidv4 } from 'uuid';
 
 class Client {
-    static srv = 'tr-touch'; // or tr-text / touch
     static sid= '';
-    static dt;
+    static count = 0;
 
     static async translate(text,version) {
         switch(version) {
-            case 0: // free web api
+            case 0: // free android api
                 const params = new URLSearchParams({
-                    id: `${await Client.getSid()}-0-0`,
-                    srv: Client.srv,
-                    source_lang: process.env.YANDEX_SOURCE_LANGUAGE,
-                    target_lang: process.env.YANDEX_TARGET_LANGUAGE,
-                    reason: 'paste',
-                    format: 'text',
-                    strategy: '', //
-                    disable_cache: '',
-                    ajax: 1
-                    //yu:
+                    id: `${uuidv4().replace(/-/g, '')}-${Client.count++}-0`,
+                    srv: 'android'
                 });
                 const formData = new URLSearchParams({
                     text,
-                    options: 0 //???
+                    source_lang: process.env.YANDEX_SOURCE_LANGUAGE,
+                    target_lang: process.env.YANDEX_TARGET_LANGUAGE,
                 });
                 let options = {
                     'method': 'POST',
                     'url': `https://translate.yandex.net/api/v1/tr.json/translate?${params.toString()}`,
                     'headers': {
                         'Content-Type': 'application/x-www-form-urlencoded',
-                        'accept': '*/*',
-                        'accept-language': 'en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7',
-                        'cache-control': 'no-cache',
-                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36',
-                        'origin': 'https://translate.yandex.com',
-                        'referer': 'https://translate.yandex.com/',
-                        'x-retpath-y': 'https://translate.yandex.com',
+                        'User-Agent': 'ru.yandex.translate/88.2.30880200 (Vivo V1965a; Android 10)',
+                        // Q: Why use this UA?
+                        // A: ...Actually, it's because I'm lazy.
+
+                        'Host': 'translate.yandex.net',
+                        'Accept-Encoding': 'gzip'
                     },
                     data: formData
                 };
@@ -47,7 +39,26 @@ class Client {
                     throw error;
                 }
             case 1: // paid api
-                break;
+                try {
+                    const response = await axios({
+                        'method': 'POST',
+                        'url': 'https://translate.api.cloud.yandex.net/translate/v2/translate',
+                        'headers': {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${process.env.YANDEX_TOKEN}`
+                        },
+                        data: JSON.stringify({
+                            "folderId": process.env.YANDEX_FOLDER_ID,
+                            "sourceLanguageCode": process.env.YANDEX_SOURCE_LANGUAGE,
+                            "targetLanguageCode": process.env.YANDEX_TARGET_LANGUAGE,
+                            "texts": [text]
+                        })
+                    });
+                    return response.data;
+                } catch (error) {
+                    console.error(error.message);
+                    throw error;
+                }
             case 2: // free browser api (Yandex Browser's built-in translation API)
             {
                 const params = new URLSearchParams({
@@ -88,32 +99,6 @@ class Client {
         return (timePart + randomPart).slice(0, 16);
     }
 
-    static async getSid() {
-        const currentTime = Date.now() / 1000;
-        if (Client.sid === '' || !Client.dt || currentTime >= Client.dt) {
-            try {
-                const response = await axios({
-                    method: 'POST',
-                    url: `https://translate.yandex.com/props/api/v1.0/sessions?srv=${Client.srv}`,
-                    headers: {
-                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36',
-                        'Accept': 'application/json',
-                        'Referer': 'https://translate.yandex.com/',
-                    }
-                });
-
-                if (response.data && response.data.session) {
-                    Client.sid = response.data.session.id;
-                    Client.dt = response.data.session.creationTimestamp+response.data.session.maxAge;
-                    console.log('New Yandex session ID obtained:', Client.sid);
-                }
-            } catch (error) {
-                console.error('Error getting Yandex session ID:', error.message);
-                throw error;
-            }
-        }
-        return Client.sid;
-    }
 }
 
 

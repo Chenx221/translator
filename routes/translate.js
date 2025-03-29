@@ -283,30 +283,32 @@ router.post('/', async (req, res) => {
     }
 
     if (global.services.yandexFree) {
-        throw new Error("Not implemented");
-        //The captcha issue has not been resolved, so this is still not implemented.
+        //<del>throw new Error("Not implemented");</del>
+        //<del>The captcha issue has not been resolved, so this is still not implemented.</del> solved
 
-        // let resp = await YandexClient.translate(text,0);
-        // if(resp.type && resp.type==='captcha'){
-        //     translationPromises.push('yandex: [Error] Captcha required');
-        // }
-        // else if (resp.code === undefined)
-        //     translationPromises.push(resp.text[0]);
-        // else {
-        //     console.error(`[ERROR] ${resp.code} ${resp.error_msg}`);
-        //     translationPromises.push('yandex: [Error] ' + resp.error_code + ' ' + resp.error_msg);
-        // }
+        let resp = await YandexClient.translate(text,0);
+        if(resp.type && resp.type==='captcha'){
+            translationPromises.push('yandex: [Error] Captcha required');
+        }
+        else if (resp.code === 200)
+            translationPromises.push(resp.text[0]);
+        else {
+            console.error(`[ERROR] ${resp.code} ${resp.error_msg}`);
+            translationPromises.push('yandex: [Error] ' + resp.error_code + ' ' + resp.error_msg);
+        }
     }
 
     if (global.services.yandexPaid) {
-        throw new Error("Not implemented");
-        // let resp = await YandexClient.translate(text,1);
-        // if (resp.error_code === undefined)
-        //     translationPromises.push(resp.tgt_text);
-        // else {
-        //     console.error(`[ERROR] ${resp.error_code} ${resp.error_msg}`);
-        //     translationPromises.push('yandex: [Error] ' + resp.error_code + ' ' + resp.error_msg);
-        // }
+        console.warn('[WARNING] Yandex paid API has not been tested, so use it with caution.');
+        // Since I don’t have a test account, this functionality is entirely based on the API documentation.
+
+        let resp = await YandexClient.translate(text,1);
+        if (resp.code === undefined)
+            translationPromises.push(resp.translations[0].text);
+        else {
+            console.error(`[ERROR] ${resp.code} ${resp.message} ${resp.details[0].requestId}`);
+            translationPromises.push('yandex: [Error] ' + resp.code + ' ' + resp.message);
+        }
     }
 
     if (global.services.yandexBrowser) {
