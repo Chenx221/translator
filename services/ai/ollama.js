@@ -24,10 +24,18 @@ class Client {
                         model,
                         messages: [
                             {
+                                role: "system",
+                                content: process.env.OLLAMA_PROMPT || process.env.GLOBAL_AI_PROMPT
+                            },
+                            {
                                 role: "user",
                                 content: text
                             }
                         ],
+                        options: {
+                            num_ctx: 1024,
+                            temperature: 0.6
+                        },
                         stream: false,
                         keep_alive: '10m'
                     });
@@ -48,6 +56,9 @@ class Client {
                                 })
                             }
                         ],
+                        options: {
+                            num_ctx: 1024
+                        },
                         format: 'json',
                         stream: false,
                         keep_alive: '10m'

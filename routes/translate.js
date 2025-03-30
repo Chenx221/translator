@@ -209,7 +209,6 @@ router.post('/', async (req, res) => {
             let resp = await OllamaClient.translate(text);
             for (const respElement of resp) {
                 if(respElement.model.startsWith('hf.co/SakuraLLM')){
-                    // 空白? 换个更低级别的模型，这个模型你的GPU驾驭不了
                     translationPromises.push(respElement.content);
                     continue;
                 }
